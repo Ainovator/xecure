@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Xecure{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/finance.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_panel.css') }}">
+
+
+    <script src="{{ url_for('static', filename='js/token.js') }}"></script>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header>
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><h1>Xecure</h1></a>
+        </div>
+        <div class="header-nav">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Главная</a></li>
+            
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('auth.finance') }}">Финансы</a></li>
+            
+                        <!-- Показываем ссылку на админ-панель только для администратора -->
+                        {% if current_user.role == 'admin' %}
+                            <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
+                            <li><a href="{{ url_for('auth.create_report') }}">Создать отчёт</a></li>
+                        {% endif %}
+                        
+                        <li><a href="{{ url_for('auth.logout') }}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
+                        <li><a href="{{ url_for('auth.signup') }}">Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            
+        </div>
+        <div class="icons">
+            <a href="{{url_for('auth.profile')}}"><img src="{{ url_for('static', filename='icons/user-icon.png') }}" alt="Кабинет" class="nav-icon"></a>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main>
+        <div id="user-role" data-role="{{ current_user.role }}"></div>
+        <div class="container">
+           
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Xecure</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Игнорируем виртуальную среду Python
+venv/
+*.pyc
+*.pyo
+__pycache__/
+app/__pycache__
+__pycache__
+
+# Логи
+logs/
+*.log
+
+# Конфиденциальные файлы
+.env
+*.env
+
+# Базы данных
+*.sqlite3
+*.db
+
+# Настройки IDE и редакторов
+.vscode/
+.idea/
+*.swp
+
+# Кэш
+.cache/
+*.egg-info/
+dist/
+build/
+
+# Статические файлы, сгенерированные на сервере
+staticfiles/
+node_modules/
+npm-debug.log

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Просмотр отчета{% endblock %}
+
+{% block content %}
+    <div class="admin-panel-container">
+        <h1>{{ report.title }}</h1>
+        <p>{{ report.content }}</p>
+    </div>
+{% endblock %}

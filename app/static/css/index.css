@@ -1,0 +1,39 @@
+.info-1{
+    background-color: rgba(38, 58, 53, 0.9);
+    color: white;
+    border-radius: 15px;
+    width: 50%;
+    gap: 20px;
+}
+
+.info-1-contain{
+    margin: 20px;
+}
+
+.info-2{
+    background-color: rgba(38, 58, 53, 0.9);
+    color: white;
+    border-radius: 15px;
+    width: 50%;
+    gap: 20px;
+    
+}
+
+.info-2-contain{
+    margin: 20px;
+}
+
+.info-2-span{
+    display: grid;
+    gap:20px;
+}
+
+.info-2-span span{
+    font-weight: bold;
+}
+
+.index-wrapper{
+    display: flex;
+    gap: 20px;
+    margin-top: 50px;
+}

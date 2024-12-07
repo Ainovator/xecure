@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание отчета{% endblock %}
+
+{% block content %}
+<div class="admin-panel-container">
+    <h1>Создать новый отчет</h1>
+    <form method="POST">
+        <div class="report-input">
+            <label for="title">Заголовок отчета</label>
+            <input type="text" id="title" name="title" class="form-control" required><br>
+        </div>
+        <div class="report-input">
+            <label for="content">Содержание отчета</label>
+            <textarea id="content" name="content" class="form-control" required></textarea><br>
+        </div>
+        <button type="submit" class="button">Создать отчет</button>
+    </form>
+</div>
+{% endblock %}

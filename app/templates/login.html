@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <main> 
+        <form method="POST">
+            <div class="login-container">
+                <!-- Flash Messages -->
+                {% if show_flash %}
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for category, message in messages %}
+                                    <div class="flash {{ category }}">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
+
+                <h1>Форма авторизации</h1>
+                <div class="login-form">
+                    <div class="input-container">
+                        <label for="username">Имя пользователя</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" required>
+                    </div> 
+                </div>
+                <button type="submit" class="button">Войти</button>
+                <p>Еще нет аккаунта? <a href="{{ url_for('auth.signup') }}">Зарегистрироваться</a></p>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

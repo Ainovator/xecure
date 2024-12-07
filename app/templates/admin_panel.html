@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Администрирование{% endblock %}
+
+{% block content %}
+<div class="admin-panel-container">
+    <h1>Список пользователей:</h1>
+    {% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Роль</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <form action="{{ url_for('auth.delete_user') }}" method="POST" style="display: inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit" class="delete-button">
+                            <img src="{{ url_for('static', filename='icons/delete.png') }}" alt="Удалить" />
+                        </button>
+                    </form>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Пользователи не найдены.</p>
+    {% endif %}
+
+    <h1>Список отчетов:</h1>
+
+    {% if reports %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.id }}</td>
+                <td>{{ report.title }}</td>
+                <td>{{ report.content[:100] }}...</td>
+                <td>
+                    <form action="{{ url_for('auth.admin_panel') }}" method="POST" style="display: inline;">
+                        <input type="hidden" name="report_id" value="{{ report.id }}">
+                        <button type="submit" class="delete-button">
+                            <img src="{{ url_for('static', filename='icons/delete.png') }}" alt="Удалить" />
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Отчёты не найдены.</p>
+    {% endif %}
+
+
+    <h1>Запросы на доступ</h1>
+
+    {% if reports %}
+        <ul class="requests-list">
+            {% for report in reports %}
+                <li>
+                    <h4>{{ report.title }}</h4>
+                    <p><strong>От кого запрос:</strong> {{ report.user.username }}</p>  <!-- Информация о пользователе -->
+                    <p><strong>Время окончания доступа:</strong> {{ report.access_expiration }}</p> <!-- Время окончания доступа -->
+
+                    <!-- Проверяем, запрашивал ли пользователь доступ к отчету -->
+                    {% if current_user.has_requested_access(report.id) and not current_user.has_access_to_report(report.id) %}
+                        <!-- Если доступ еще не одобрен -->
+                        <form action="{{ url_for('auth.approve_report', report_id=report.id) }}" method="POST">
+                            <!-- Добавляем поле для ввода времени в секундах -->
+                            <label for="access_duration_{{ report.id }}">Время доступа (в секундах):</label>
+                            <input type="number" name="access_duration" min="1" value="60" id="access_duration_{{ report.id }}" required>
+                            <button type="submit" class="btn btn-success">Одобрить</button>
+                        </form>
+                    {% elif current_user.has_access_to_report(report.id) %}
+                        <!-- Если доступ уже одобрен -->
+                        <p>Доступ к отчету уже предоставлен.</p>
+                    {% else %}
+                        <!-- Если запрос на доступ еще не был отправлен -->
+                        <p>Запрос на доступ еще не отправлен.</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет запросов на доступ.</p>
+    {% endif %}
+
+
+
+</div>
+{% endblock %}

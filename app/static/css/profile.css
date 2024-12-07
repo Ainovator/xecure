@@ -1,0 +1,9 @@
+.profile-container {
+    width: 100%; /* Занять всю ширину родителя */
+    min-height: 600px; /* Минимальная высота */
+    background-color: white; /* Цвет фона */
+    border-radius: 10px; /* Округление углов */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Мягкая тень */
+    padding: 20px; /* Внутренний отступ */
+    box-sizing: border-box; /* Включает padding в width */
+}

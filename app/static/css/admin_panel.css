@@ -1,0 +1,127 @@
+.admin-panel-container{
+    background-color: white;
+    width: 100%;
+    min-width: 1000px;
+    min-height: 600px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+
+table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+.delete-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;  /* Плавный переход для трансформации и цвета */
+}
+
+.delete-button img {
+    width: 35px;  /* Начальный размер иконки */
+    height: 35px;
+    transition: transform 0.3s ease;  /* Плавный переход для увеличения иконки */
+}
+
+/* Эффект при наведении */
+.delete-button:hover img {
+    transform: scale(1.2);  /* Увеличиваем иконку */
+}
+
+/* Стили для списка запросов на доступ */
+.requests-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requests-list li {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.requests-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Заголовок запроса */
+.requests-list h4 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Краткое описание отчета */
+.requests-list p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Стили для кнопок */
+.requests-list .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Стили для кнопки "Одобрить" */
+.requests-list .btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+}
+
+.requests-list .btn-success:hover {
+    background-color: #218838;
+}
+
+/* Стили для уведомлений */
+.requests-list .waiting-notice {
+    font-size: 0.9rem;
+    color: #ff9800;  /* Оранжевый цвет для уведомлений */
+    margin-top: 10px;
+}
+
+
