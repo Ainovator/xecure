@@ -73,40 +73,38 @@
     {% endif %}
 
 
+
     <h1>Запросы на доступ</h1>
 
-    {% if reports %}
-        <ul class="requests-list">
-            {% for report in reports %}
-                <li>
-                    <h4>{{ report.title }}</h4>
-                    <p><strong>От кого запрос:</strong> {{ report.user.username }}</p>  <!-- Информация о пользователе -->
-                    <p><strong>Время окончания доступа:</strong> {{ report.access_expiration }}</p> <!-- Время окончания доступа -->
+{% if requests %}
+    <ul class="requests-list">
+        {% for request in requests %}
+            <li>
+                <h4>Отчёт: {{ request.parent_report.title }}</h4>
+                <p><strong>От кого запрос:</strong> {{ request.user.username }}</p>
+                <p><strong>Время окончания доступа:</strong> {{ request.access_expiration }}</p>
 
-                    <!-- Проверяем, запрашивал ли пользователь доступ к отчету -->
-                    {% if current_user.has_requested_access(report.id) and not current_user.has_access_to_report(report.id) %}
-                        <!-- Если доступ еще не одобрен -->
-                        <form action="{{ url_for('auth.approve_report', report_id=report.id) }}" method="POST">
-                            <!-- Добавляем поле для ввода времени в секундах -->
-                            <label for="access_duration_{{ report.id }}">Время доступа (в секундах):</label>
-                            <input type="number" name="access_duration" min="1" value="60" id="access_duration_{{ report.id }}" required>
-                            <button type="submit" class="btn btn-success">Одобрить</button>
-                        </form>
-                    {% elif current_user.has_access_to_report(report.id) %}
-                        <!-- Если доступ уже одобрен -->
-                        <p>Доступ к отчету уже предоставлен.</p>
-                    {% else %}
-                        <!-- Если запрос на доступ еще не был отправлен -->
-                        <p>Запрос на доступ еще не отправлен.</p>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Нет запросов на доступ.</p>
-    {% endif %}
+               
+
+                {% if not request.approved %}
+                    <form action="{{ url_for('auth.approve_report', report_id=request.parent_report.id) }}" method="POST" style="display: inline;">
+                        <label for="access_duration_{{ request.id }}">Время доступа (в секундах):</label>
+                        <input type="number" name="access_duration" min="1" value="60" id="access_duration_{{ request.id }}" required>
+                        <button type="submit" class="btn btn-success">Одобрить</button>
+                    </form>
+                    <form action="{{ url_for('auth.reject_request', request_id=request.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Отклонить</button>
+                    </form>
+                {% else %}
+                    <p>Доступ уже предоставлен.</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет запросов на доступ.</p>
+{% endif %}
 
 
-
-</div>
+    </div>
 {% endblock %}

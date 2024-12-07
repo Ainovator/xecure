@@ -124,4 +124,24 @@ table tr:hover {
     margin-top: 10px;
 }
 
+.btn-danger {
+    background-color: #dc3545; /* Основной красный цвет */
+    color: #fff; /* Белый текст */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Более тёмный красный при наведении */
+}
+
+.btn-danger:active {
+    background-color: #bd2130; /* Цвет при нажатии */
+}
+
+.btn-danger:disabled {
+    background-color: #e4606d; /* Более светлый красный для отключенной кнопки */
+    color: #fff; /* Белый текст для отключенной кнопки */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 

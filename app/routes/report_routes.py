@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import User, Report, ReportAccessRequest
+from app.models import *
 from . import db, login_manager  
 from app.extensions import redis_client  
 from uuid import uuid4
@@ -56,6 +56,7 @@ def approve_report(report_id):
 
     return redirect(url_for('auth.admin_panel'))  # Перенаправляем на админ-панель
 
+
 @auth.route('/request_access/<int:report_id>', methods=['POST'])
 @login_required
 def request_access(report_id):
@@ -64,16 +65,30 @@ def request_access(report_id):
         flash('Отчет не найден.', 'error')
         return redirect(url_for('auth.finance'))
 
-    # Проверяем, есть ли уже запрос на этот отчет от этого пользователя
-    existing_request = ReportAccessRequest.query.filter_by(user_id=current_user.id, report_id=report.id).first()
-    if existing_request:
-        flash('Вы уже запросили доступ к этому отчету.', 'info')
+    # Проверяем, был ли запрос отклонён
+    rejected_request = RejectedRequest.query.filter_by(
+        user_id=current_user.id,
+        report_id=report.id
+    ).first()
+    if rejected_request:
+        flash('Ваш запрос был отклонён администратором. Вы не можете отправить повторный запрос.', 'error')
         return redirect(url_for('auth.finance'))
 
-    # Устанавливаем время доступа (например, 24 часа)
-    access_expiration = datetime.utcnow() + timedelta(hours=24)
+    # Удаляем истёкший запрос (если есть)
+    existing_request = ReportAccessRequest.query.filter_by(
+        user_id=current_user.id, report_id=report.id
+    ).first()
+    if existing_request and existing_request.access_expiration < datetime.utcnow():
+        db.session.delete(existing_request)
+        db.session.commit()
 
-    # Создаем запрос на доступ
+    # Проверяем, если запрос ещё активен
+    if existing_request:
+        flash('Ваш запрос уже ожидает одобрения.', 'info')
+        return redirect(url_for('auth.finance'))
+
+    # Создаём новый запрос
+    access_expiration = datetime.utcnow() + timedelta(hours=24)
     new_request = ReportAccessRequest(
         user_id=current_user.id,
         report_id=report.id,
@@ -82,30 +97,61 @@ def request_access(report_id):
     db.session.add(new_request)
     db.session.commit()
 
-    flash('Ваш запрос на доступ к отчету отправлен. Ожидайте одобрения.', 'success')
+    flash('Ваш запрос на доступ отправлен. Ожидайте одобрения.', 'success')
     return redirect(url_for('auth.finance'))
+
+
+
+@auth.route('/reject_request/<int:request_id>', methods=['POST'])
+@login_required
+@admin_required
+def reject_request(request_id):
+    # Находим запрос по ID
+    access_request = ReportAccessRequest.query.get(request_id)
+    if not access_request:
+        flash('Запрос на доступ не найден.', 'error')
+        return redirect(url_for('auth.admin_panel'))
+
+    # Создаём запись об отклонении
+    rejected_request = RejectedRequest(
+        user_id=access_request.user_id,
+        report_id=access_request.report_id
+    )
+    db.session.add(rejected_request)
+
+    # Удаляем запрос из ReportAccessRequest
+    db.session.delete(access_request)
+    db.session.commit()
+
+    flash('Запрос на доступ отклонён.', 'success')
+    return redirect(url_for('auth.admin_panel'))
+
+@auth.route('/rejected_requests', methods=['GET'])
+@login_required
+def rejected_requests():
+    rejections = RejectedRequest.query.filter_by(user_id=current_user.id).all()
+    return render_template('rejected_requests.html', rejections=rejections)
+
+
 
 
 @auth.route('/view_report/<int:report_id>', methods=['GET'])
 @login_required
 def view_report(report_id):
-    # Проверяем, есть ли у пользователя запрос на доступ к этому отчету
+    # Проверяем запрос доступа для текущего пользователя
     access_request = ReportAccessRequest.query.filter_by(user_id=current_user.id, report_id=report_id).first()
 
-    if not access_request or not access_request.approved:
-        flash('Вы не можете просматривать этот отчет. Ваш запрос еще не одобрен или срок действия доступа истек.', 'error')
+    if not access_request:
+        flash('Вы не запрашивали доступ к этому отчету.', 'error')
         return redirect(url_for('auth.finance'))
 
-    # Проверяем, не истек ли срок действия доступа
     if access_request.access_expiration < datetime.utcnow():
-        flash('Время доступа к отчету истекло. Пожалуйста, запросите доступ снова.', 'error')
-        
-        # Удаляем или деактивируем доступ, так как время истекло
-        access_request.approved = False
+        # Удаляем запрос, если срок действия истек
+        db.session.delete(access_request)
         db.session.commit()
-        
+        flash('Срок действия доступа истек. Пожалуйста, запросите доступ снова.', 'error')
         return redirect(url_for('auth.finance'))
 
-    # Если доступ еще актуален, отображаем отчет
+    # Если доступ активен, показываем отчет
     report = Report.query.get(report_id)
     return render_template('view_report.html', report=report)

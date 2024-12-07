@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import timedelta, datetime
 
-from app.models import User, Report, ReportAccessRequest
+from app.models import *
 from app.extensions import db, redis_client
 from app.routes.auth_routes import auth
 

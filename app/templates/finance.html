@@ -12,13 +12,19 @@
                     <h3>{{ report.title }}</h3>
                     <p>{{ report.content[:100] }}...</p>
 
-                    {% if not current_user.has_requested_access(report.id) %}
+                    {% if current_user.has_rejected_access(report.id) %}
+                        <!-- Сообщение об отклонении -->
+                        <p class="text-danger">Ваш запрос на доступ был отклонён администратором.</p>
+                    {% elif not current_user.has_requested_access(report.id) %}
+                        <!-- Кнопка запроса доступа -->
                         <form action="{{ url_for('auth.request_access', report_id=report.id) }}" method="POST">
                             <button type="submit" class="btn btn-primary">Запросить доступ</button>
                         </form>
                     {% elif current_user.has_requested_access(report.id) and not current_user.has_access_to_report(report.id) %}
+                        <!-- Ожидание одобрения -->
                         <p>Ваш запрос на доступ ещё не одобрен.</p>
                     {% else %}
+                        <!-- Доступ разрешён -->
                         <a href="{{ url_for('auth.view_report', report_id=report.id) }}" class="btn btn-success">Посмотреть отчет</a>
                     {% endif %}
                 </div>

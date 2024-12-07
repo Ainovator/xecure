@@ -7,5 +7,20 @@
         <p>Это ваш личный кабинет. Здесь вы можете управлять своим аккаунтом.</p>
         <a href="{{ url_for('auth.logout') }}"><button class="button">Выйти</button></a>
     </div>
+    <h1>Отклонённые запросы</h1>
+
+{% if rejections %}
+    <ul>
+        {% for rejection in rejections %}
+            <li>
+                <p>Отчёт: {{ rejection.report.title }}</p>
+                <p>Отклонено: {{ rejection.rejected_at }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас нет отклонённых запросов.</p>
+{% endif %}
+
     
 {% endblock %}

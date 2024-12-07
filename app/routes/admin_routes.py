@@ -32,6 +32,7 @@ def admin_required(f):
 def admin_panel():
     users = User.query.all()  # Получаем всех пользователей
     reports = Report.query.all()  # Получаем все отчёты
+    access_requests = ReportAccessRequest.query.all()
 
     # Удаление отчёта, если это POST-запрос с report_id
     if request.method == 'POST':
@@ -46,7 +47,7 @@ def admin_panel():
 
         return redirect(url_for('auth.admin_panel'))
 
-    return render_template('admin_panel.html', users=users, reports=reports)
+    return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests)
 
 
 
