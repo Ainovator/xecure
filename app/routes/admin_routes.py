@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import User, Report, ReportAccessRequest
+from app.models import User, Report, ReportAccessRequest, UserActionLog
 from . import db, login_manager  
 from app.extensions import redis_client  
 from flask import jsonify
@@ -33,6 +33,9 @@ def admin_panel():
     users = User.query.all()  # Получаем всех пользователей
     reports = Report.query.all()  # Получаем все отчёты
     access_requests = ReportAccessRequest.query.all()
+    
+    #user_id = User.query.filter_by(user)
+    #logs_user = UserActionLog.query.filter_by(user_id=users.id)
 
     # Удаление отчёта, если это POST-запрос с report_id
     if request.method == 'POST':
@@ -47,7 +50,7 @@ def admin_panel():
 
         return redirect(url_for('auth.admin_panel'))
 
-    return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests)
+    return render_template('admin_panel.html', users=users, reports=reports, requests=access_request)
 
 
 

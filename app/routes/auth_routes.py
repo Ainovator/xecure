@@ -8,6 +8,7 @@ from uuid import uuid4
 from flask import jsonify
 from functools import wraps
 from datetime import timedelta, datetime
+from app.utils import log_user_action
 
 auth = Blueprint('auth', __name__)
 
@@ -52,6 +53,11 @@ def login():
             flash('Неверное имя пользователя или пароль.', 'error')
             return render_template('login.html')
 
+    
+        user_id = user.id
+        log_user_action(user.id, "Успешный вход в сессию")
+
+        
         login_user(user)
 
         # Генерация токена
@@ -71,5 +77,14 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    # Получаем user.id из current_user
+    user_id = current_user.id
+
+    # Логируем действие до разлогинивания
+    log_user_action(user_id, "Успешный выход из сессии")
+
+    # Разлогиниваем пользователя
     logout_user()
+
+    # Перенаправляем на главную страницу
     return redirect(url_for('home'))
