@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Xecure{% endblock %}</title>
+
+    <!-- Стили -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
@@ -13,13 +15,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create_report.css') }}">
 
-
-
+    <!-- Скрипты -->
     <script src="{{ url_for('static', filename='js/token.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-
-    
+    <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -35,15 +35,11 @@
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Главная</a></li>
-            
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('auth.finance') }}">Документы</a></li>
-            
-                        <!-- Показываем ссылку на админ-панель только для администратора -->
                         {% if current_user.role == 'admin' %}
                             <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
                         {% endif %}
-                        
                         <li><a href="{{ url_for('auth.logout') }}">Выход</a></li>
                     {% else %}
                         <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
@@ -51,10 +47,11 @@
                     {% endif %}
                 </ul>
             </nav>
-            
         </div>
         <div class="icons">
-            <a href="{{url_for('auth.profile')}}"><img src="{{ url_for('static', filename='icons/user-icon.png') }}" alt="Кабинет" class="nav-icon"></a>
+            <a href="{{ url_for('auth.profile') }}">
+                <img src="{{ url_for('static', filename='icons/user-icon.png') }}" alt="Кабинет" class="nav-icon">
+            </a>
         </div>
     </header>
 
@@ -62,7 +59,6 @@
     <main>
         <div id="user-role" data-role="{{ current_user.role }}"></div>
         <div class="container">
-           
             {% block content %}{% endblock %}
         </div>
     </main>
@@ -74,7 +70,7 @@
             <div class="footer-logo">
                 <h2>Xecure</h2>
             </div>
-    
+
             <!-- Ссылки -->
             <div class="footer-links">
                 <ul>
@@ -83,23 +79,19 @@
                     <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
                 </ul>
             </div>
-    
+
             <!-- Контакты -->
             <div class="footer-contacts">
                 <p>Email: <a href="mailto:info@xecure.com">info@xecure.com</a></p>
                 <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
             </div>
         </div>
-    
+
         <!-- Нижний блок -->
         <div class="footer-bottom">
             <p>&copy; 2024 Xecure. Все права защищены. <a href="#">Политика конфиденциальности</a></p>
         </div>
     </footer>
-    
-    
-    
-    
 
 </body>
 </html>

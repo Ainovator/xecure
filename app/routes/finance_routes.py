@@ -14,5 +14,3 @@ from app.routes.auth_routes import auth
 def finance():
     reports = Report.query.all()  # Можно добавить кэширование с использованием Redis
     return render_template('finance.html', user=current_user, reports=reports)
-
-

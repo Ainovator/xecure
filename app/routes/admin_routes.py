@@ -1,13 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
-from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import User, Report, ReportAccessRequest, UserActionLog
-from . import db, login_manager  
-from app.extensions import redis_client  
-from flask import jsonify
-from functools import wraps
-from datetime import timedelta, datetime
+from flask_login import login_required, current_user
+from app.models import User, Report, ReportAccessRequest
+from . import db
 from app.routes.auth_routes import auth
+from functools import wraps
 
 
 def admin_required(f):
@@ -21,26 +17,27 @@ def admin_required(f):
             return redirect(url_for('auth.login'))
         if current_user.role != 'admin':
             flash('У вас нет доступа к этой странице.', 'error')
-            abort(403)  # Генерация ошибки 403
+            abort(403)  # Генерация ошибки 403 (доступ запрещён)
         return f(*args, **kwargs)
     return decorated_function
 
 
 @auth.route('/admin_panel', methods=['GET', 'POST'])
 @login_required
-@admin_required  # Только администратор может получить доступ к этой панели
+@admin_required
 def admin_panel():
-    users = User.query.all()  # Получаем всех пользователей
-    reports = Report.query.all()  # Получаем все отчёты
-    access_requests = ReportAccessRequest.query.all()
-    
-    #user_id = User.query.filter_by(user)
-    #logs_user = UserActionLog.query.filter_by(user_id=users.id)
+    """
+    Панель администратора: управление пользователями, отчётами и запросами доступа.
+    """
+    users = User.query.all()  # Список всех пользователей
+    reports = Report.query.all()  # Список всех отчётов
+    access_requests = ReportAccessRequest.query.all()  # Список всех запросов доступа
 
-    # Удаление отчёта, если это POST-запрос с report_id
+    # Обработка удаления отчёта
     if request.method == 'POST':
         report_id = request.form.get('report_id')
         report_to_delete = Report.query.get(report_id)
+
         if report_to_delete:
             db.session.delete(report_to_delete)
             db.session.commit()
@@ -53,26 +50,26 @@ def admin_panel():
     return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests)
 
 
-
 @auth.route('/delete_user', methods=['POST'])
 @login_required
-@admin_required  # Проверка на роль администратора
+@admin_required
 def delete_user():
+    """
+    Удаление пользователя из системы. Доступно только администраторам.
+    """
     user_id = request.form.get('user_id')
     user_to_delete = User.query.get(user_id)
 
     if user_to_delete:
-        # Проверяем, что админ не удаляет себя
+        # Проверка на удаление собственного аккаунта
         if user_to_delete.username == current_user.username:
             flash('Вы не можете удалить свой собственный аккаунт.', 'error')
             return redirect(url_for('auth.admin_panel'))
 
         db.session.delete(user_to_delete)
         db.session.commit()
-        flash(f'Пользователь {user_to_delete.username} успешно удален.', 'success')
+        flash(f'Пользователь {user_to_delete.username} успешно удалён.', 'success')
     else:
         flash('Пользователь не найден.', 'error')
 
     return redirect(url_for('auth.admin_panel'))
-
- 
