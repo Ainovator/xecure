@@ -1,0 +1,110 @@
+/* create-report.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.report-form-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.report-title {
+    font-size: 32px;
+    margin-bottom: 2rem;
+    color: #ff007f;
+    text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+}
+
+/* Поля ввода */
+.report-field {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 100%;
+}
+
+.report-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ddd;
+    margin-bottom: 0.5rem;
+}
+
+/* Общий стиль для полей ввода */
+.report-input, 
+.report-textarea {
+    width: 100%; /* Задаём одинаковую ширину */
+    padding: 0.9rem 1rem; /* Внутренние отступы */
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    outline: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Включаем отступы и границы в расчёт ширины */
+}
+
+.report-input:focus, 
+.report-textarea:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Текстовое поле */
+.report-textarea {
+    height: 150px;
+    resize: none; /* Отключаем изменение размеров пользователем */
+}
+
+
+/* Кнопка */
+.report-submit-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background: #ff007f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.report-submit-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .report-form-wrapper {
+        margin: 20px;
+        padding: 1.5rem;
+    }
+
+    .report-title {
+        font-size: 24px;
+    }
+
+    .report-submit-button {
+        width: 100%;
+    }
+}

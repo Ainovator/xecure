@@ -1,147 +1,209 @@
-.admin-panel-container{
-    background-color: white;
-    width: 100%;
-    min-width: 1000px;
-    min-height: 600px;
-    padding: 20px;
-    border-radius: 10px;
+/* Основные стили */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #f3f3f3, #e2e2e2);
+    color: #333;
 }
 
+section{
+    background: none;
+    box-shadow: none;
+}
+/* Админ-панель */
+.admin-panel {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+}
 
-table {
+/* Основной контент */
+.admin-content {
+    flex: 1;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #2c5364, #203a43);
+    color: #ffffff;
+}
+
+/* Боковая панель */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #2c5364, #203a43);
+    color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar nav ul li button {
+    background: none;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar nav ul li button.active {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    font-weight: bold;
+}
+
+.sidebar nav ul li button:hover {
+    transform: translateX(-5px);
+}
+
+/* Таблица */
+.styled-table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table thead th {
+    color: #ffffff;
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+}
+
+.styled-table tbody td {
+    padding: 10px;
+}
+
+/* Кнопка удаления */
+.delete-button {
+    background: #dc3545;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.delete-button:hover {
+    background: #c82333;
+}
+
+/* Управление вкладками */
+.tab-content {
+    display: none; /* По умолчанию скрываем вкладки */
+}
+
+.tab-content.active {
+    display: block; /* Показываем активную вкладку */
+}
+
+/* Вкладка "Запросы" */
+.requests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     margin-top: 20px;
 }
 
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-
-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-}
-
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-
-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-
-.delete-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: transform 0.3s ease, color 0.3s ease;  /* Плавный переход для трансформации и цвета */
-}
-
-.delete-button img {
-    width: 35px;  /* Начальный размер иконки */
-    height: 35px;
-    transition: transform 0.3s ease;  /* Плавный переход для увеличения иконки */
-}
-
-/* Эффект при наведении */
-.delete-button:hover img {
-    transform: scale(1.2);  /* Увеличиваем иконку */
-}
-
-/* Стили для списка запросов на доступ */
-.requests-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.requests-list li {
-    background-color: #fff;
-    border-radius: 8px;
+.request-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
     padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-size: 16px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.requests-list li:hover {
+.request-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Заголовок запроса */
-.requests-list h4 {
-    font-size: 1.4rem;
+.request-card h4 {
     margin-bottom: 10px;
-    color: #333;
+    font-size: 20px;
     font-weight: bold;
 }
 
-/* Краткое описание отчета */
-.requests-list p {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 15px;
-    line-height: 1.4;
+.request-card p {
+    margin: 5px 0;
 }
 
-/* Стили для кнопок */
-.requests-list .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.request-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
 }
 
-/* Стили для кнопки "Одобрить" */
-.requests-list .btn-success {
-    background-color: #28a745;
-    color: #fff;
+/* Кнопки */
+.request-actions form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.request-actions form button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
     border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.requests-list .btn-success:hover {
-    background-color: #218838;
+.request-actions form .btn-success {
+    background: #28a745;
 }
 
-/* Стили для уведомлений */
-.requests-list .waiting-notice {
-    font-size: 0.9rem;
-    color: #ff9800;  /* Оранжевый цвет для уведомлений */
-    margin-top: 10px;
+.request-actions form .btn-success:hover {
+    background: #218838;
 }
 
-.btn-danger {
-    background-color: #dc3545; /* Основной красный цвет */
-    color: #fff; /* Белый текст */
+.request-actions form .btn-danger {
+    background: #dc3545;
 }
 
-.btn-danger:hover {
-    background-color: #c82333; /* Более тёмный красный при наведении */
+.request-actions form .btn-danger:hover {
+    background: #c82333;
 }
 
-.btn-danger:active {
-    background-color: #bd2130; /* Цвет при нажатии */
+/* Поля ввода */
+.request-actions input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    margin-top: 5px;
+    outline: none;
 }
 
-.btn-danger:disabled {
-    background-color: #e4606d; /* Более светлый красный для отключенной кнопки */
-    color: #fff; /* Белый текст для отключенной кнопки */
-    cursor: not-allowed;
-    opacity: 0.6;
+.request-actions input[type="number"]:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
-
-

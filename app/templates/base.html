@@ -10,16 +10,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/finance.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_panel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_report.css') }}">
+
 
 
     <script src="{{ url_for('static', filename='js/token.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="{{ page_class }}">
 
     <!-- Шапка -->
     <header>
@@ -64,11 +69,39 @@
     </main>
 
     <!-- Футер -->
-    <footer>
+    <footer class="footer">
         <div class="footer-container">
-            <p>&copy; 2024 Xecure</p>
+            <!-- Логотип и описание -->
+            <div class="footer-logo">
+                <h2>Xecure</h2>
+            </div>
+    
+            <!-- Ссылки -->
+            <div class="footer-links">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Главная</a></li>
+                    <li><a href="{{ url_for('auth.finance') }}">Финансы</a></li>
+                    <li><a href="{{ url_for('auth.create_report') }}">Создать отчёт</a></li>
+                    <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
+                </ul>
+            </div>
+    
+            <!-- Контакты -->
+            <div class="footer-contacts">
+                <p>Email: <a href="mailto:info@xecure.com">info@xecure.com</a></p>
+                <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+            </div>
+        </div>
+    
+        <!-- Нижний блок -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 Xecure. Все права защищены. <a href="#">Политика конфиденциальности</a></p>
         </div>
     </footer>
+    
+    
+    
+    
 
 </body>
 </html>

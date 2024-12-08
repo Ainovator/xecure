@@ -3,18 +3,19 @@
 {% block title %}Создание отчета{% endblock %}
 
 {% block content %}
-<div class="admin-panel-container">
-    <h1>Создать новый отчет</h1>
+<div class="report-form-wrapper">
+    <h1 class="report-title">Создать новый отчет</h1>
     <form method="POST">
-        <div class="report-input">
-            <label for="title">Заголовок отчета</label>
-            <input type="text" id="title" name="title" class="form-control" required><br>
+        <div class="report-field">
+            <label for="title" class="report-label">Заголовок отчета</label>
+            <input type="text" id="title" name="title" class="report-input" required>
         </div>
-        <div class="report-input">
-            <label for="content">Содержание отчета</label>
-            <textarea id="content" name="content" class="form-control" required></textarea><br>
+        <div class="report-field">
+            <label for="content" class="report-label">Содержание отчета</label>
+            <textarea id="content" name="content" class="report-textarea" required></textarea>
         </div>
-        <button type="submit" class="button">Создать отчет</button>
+        <button type="submit" class="report-submit-button">Создать отчет</button>
     </form>
 </div>
+
 {% endblock %}

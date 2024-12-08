@@ -3,28 +3,25 @@
 {% block title %}Регистрация{% endblock %}
 
 {% block content %}
-
-        <div class="login-container">
-            <h1>Регистрация</h1>
-
-         
-
-            <form method="POST" action="{{ url_for('auth.signup') }}">
-                <div class="input-container">
-                    <label for="username">Имя пользователя</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="input-container">
-                    <label for="password">Пароль</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="input-container">
-                    <label for="confirm_password">Повторите пароль</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-                <button type="submit" class="button">Зарегистрироваться</button>
-                <p>Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войти</a></p>
-            </form>
-        </div>
-
+<div class="page-container">
+    <div class="auth-container">
+        <h1>Регистрация</h1>
+        <form method="POST" action="{{ url_for('auth.signup') }}">
+            <div class="auth-input">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="auth-input">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="auth-input">
+                <label for="confirm_password">Повторите пароль</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="button">Зарегистрироваться</button>
+            <p>Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войти</a></p>
+        </form>
+    </div>
+</div>
 {% endblock %}

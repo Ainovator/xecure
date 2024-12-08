@@ -1,26 +1,68 @@
 {% extends 'base.html' %}
+
 {% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
-    <div class="profile-container">
-        <h1>Добро пожаловать, {{ user.username }}!</h1>
-        <p>Это ваш личный кабинет. Здесь вы можете управлять своим аккаунтом.</p>
-        <a href="{{ url_for('auth.logout') }}"><button class="button">Выйти</button></a>
+<div class="page-container">
+    <!-- Приветствие и информация -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img src="{{ url_for('static', filename='images/avatar_placeholder.png') }}" alt="Аватар пользователя">
+        </div>
+        <div class="profile-welcome">
+            <h1>Добро пожаловать, {{ user.username }}!</h1>
+            <p>Это ваш личный кабинет. Здесь вы можете управлять своим аккаунтом, просматривать статус запросов и обновлять личную информацию.</p>
+            <div class="profile-actions">
+                <a href="{{ url_for('auth.logout') }}">
+                    <button class="button button-logout">Выйти</button>
+                </a>
+               
+            </div>
+        </div>
     </div>
-    <h1>Отклонённые запросы</h1>
 
-{% if rejections %}
-    <ul>
-        {% for rejection in rejections %}
-            <li>
-                <p>Отчёт: {{ rejection.report.title }}</p>
-                <p>Отклонено: {{ rejection.rejected_at }}</p>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>У вас нет отклонённых запросов.</p>
-{% endif %}
+    <!-- Основной контент -->
+    <div class="profile-content">
+        <div class="profile-section">
+            <h2>Отклонённые запросы</h2>
+            {% if rejections %}
+            <ul class="rejections-list">
+                {% for rejection in rejections %}
+                <li>
+                    <p><strong>Отчёт:</strong> {{ rejection.report.title }}</p>
+                    <p><strong>Дата отклонения:</strong> {{ rejection.rejected_at }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>У вас нет отклонённых запросов.</p>
+            {% endif %}
+        </div>
 
-    
+        <div class="profile-section">
+            <h2>Активные запросы</h2>
+            {% if active_requests %}
+            <ul class="requests-list">
+                {% for request in active_requests %}
+                <li>
+                    <p><strong>Отчёт:</strong> {{ request.report.title }}</p>
+                    <p><strong>Статус:</strong> Ожидает одобрения</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>У вас нет активных запросов.</p>
+            {% endif %}
+        </div>
+
+        <div class="profile-section">
+            <h2>Последние действия</h2>
+            <ul class="activity-list">
+                <li><p>Загрузили отчёт "Финансовый анализ".</p></li>
+                <li><p>Запросили доступ к отчёту "Годовой отчёт".</p></li>
+                <li><p>Обновили профиль.</p></li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
