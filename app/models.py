@@ -8,6 +8,13 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(20), default="user")
 
+    access_requests = db.relationship(
+        'ReportAccessRequest',
+        backref='requesting_user',  # Изменено имя backref
+        cascade='all, delete-orphan',
+        lazy=True
+    )
+    
     def _get_report_access_request(self, report_id):
         """Универсальный метод для получения запроса на доступ к отчету."""
         return ReportAccessRequest.query.filter_by(user_id=self.id, report_id=report_id).first()
@@ -70,10 +77,13 @@ class ReportAccessRequest(db.Model):
     access_expiration = db.Column(db.DateTime, nullable=False)
     approved = db.Column(db.Boolean, default=False)
 
-    user = db.relationship('User', backref='access_requests', lazy=True)
+    # Назначение уникального имени для backref
+    user = db.relationship('User', backref=db.backref('user_access_requests', cascade='all, delete-orphan'))
 
     def __repr__(self):
         return f'<ReportAccessRequest user_id={self.user_id}, report_id={self.report_id}>'
+
+
 
 
 class RejectedRequest(db.Model):
@@ -90,8 +100,14 @@ class RejectedRequest(db.Model):
     )
     rejected_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref=db.backref('rejected_requests', cascade='all, delete-orphan', lazy=True))
-    report = db.relationship('Report', backref=db.backref('rejected_requests', cascade='all, delete-orphan', lazy=True))
+    user = db.relationship(
+        'User',
+        backref=db.backref('rejected_requests', cascade='all, delete-orphan', lazy=True)
+    )
+    report = db.relationship(
+        'Report',
+        backref=db.backref('rejected_requests', cascade='all, delete-orphan', lazy=True)
+    )
 
     def __repr__(self):
         return f'<RejectedRequest user_id={self.user_id}, report_id={self.report_id}>'
