@@ -45,16 +45,34 @@
             <ul class="requests-list">
                 {% for request in active_requests %}
                 <li>
-                    <p><strong>Отчёт:</strong> {{ request.report.title }}</p>
-                    <p><strong>Статус:</strong> Ожидает одобрения</p>
+                    <p><strong>Отчёт:</strong> {{ request.parent_report.title }}</p>
+                    <p><strong>Статус:</strong> 
+                        <span class="status-awaiting">Ожидает одобрения</span>
+                    </p>
                 </li>
                 {% endfor %}
             </ul>
             {% else %}
             <p>У вас нет активных запросов.</p>
             {% endif %}
-        </div>
 
+            {% if approved_requests %}
+            <ul class="requests-list">
+                {% for request in approved_requests %}
+                <li>
+                    <p><strong>Отчёт:</strong> {{ request.parent_report.title }}</p>
+                    <p><strong>Доступ истекает:</strong> {{ request.access_expiration.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p><strong>Статус:</strong> 
+                        <span class="status-accessed">Одобрен</span>
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    
+        
+        
         <div class="profile-section">
             <h2>Последние действия</h2>
             <ul class="activity-list">

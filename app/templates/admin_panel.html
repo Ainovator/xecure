@@ -120,24 +120,43 @@
     <!-- Боковая панель -->
     <aside class="sidebar">
         <nav>
-            <ul>
-                <li>
-                    <button class="tab-link active" data-tab="users-tab">
-                        <span class="tab-icon">👤</span> Пользователи
-                    </button>
-                </li>
-                <li>
-                    <button class="tab-link" data-tab="reports-tab">
-                        <span class="tab-icon">📊</span> Отчёты
-                    </button>
-                </li>
-                <li>
-                    <button class="tab-link" data-tab="requests-tab">
-                        <span class="tab-icon">📩</span> Запросы
-                    </button>
-                </li>
-            </ul>
+            <!-- Модуль "Управление" -->
+            <div class="module">
+                <h3>Управление</h3>
+                <ul>
+                    <li>
+                        <button class="tab-link active" data-tab="users-tab">
+                            <span class="tab-icon">👤</span> Пользователи
+                        </button>
+                    </li>
+                    <li>
+                        <button class="tab-link" data-tab="reports-tab">
+                            <span class="tab-icon">📊</span> Отчёты
+                        </button>
+                    </li>
+                    <li>
+                        <button class="tab-link" data-tab="requests-tab">
+                            <span class="tab-icon">📩</span> Запросы
+                        </button>
+                    </li>
+                </ul>
+            </div>
+    
+            <!-- Новый модуль "Действия" -->
+            <div class="module">
+                <h3>Действия</h3>
+                <ul>
+                    <li>
+                        <button class="action-button" onclick="location.href='{{ url_for('auth.create_report') }}';">
+                            <span class="tab-icon">➕</span> Создать отчёт
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </aside>
+    
+    
+    
 </div>
 {% endblock %}

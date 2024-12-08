@@ -142,3 +142,14 @@
         height: 100px;
     }
 }
+
+.requests-list .status-awaiting {
+    color: #ffcc00; /* Желтый цвет */
+    font-weight: bold;
+}
+
+.requests-list .status-accessed {
+    color: #28a745; /* Зеленый в стиле Bootstrap */
+    font-weight: bold;
+}
+

@@ -37,12 +37,11 @@
                     <li><a href="{{ url_for('home') }}">Главная</a></li>
             
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('auth.finance') }}">Финансы</a></li>
+                        <li><a href="{{ url_for('auth.finance') }}">Документы</a></li>
             
                         <!-- Показываем ссылку на админ-панель только для администратора -->
                         {% if current_user.role == 'admin' %}
                             <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
-                            <li><a href="{{ url_for('auth.create_report') }}">Создать отчёт</a></li>
                         {% endif %}
                         
                         <li><a href="{{ url_for('auth.logout') }}">Выход</a></li>
@@ -80,8 +79,7 @@
             <div class="footer-links">
                 <ul>
                     <li><a href="{{ url_for('home') }}">Главная</a></li>
-                    <li><a href="{{ url_for('auth.finance') }}">Финансы</a></li>
-                    <li><a href="{{ url_for('auth.create_report') }}">Создать отчёт</a></li>
+                    <li><a href="{{ url_for('auth.finance') }}">Документы</a></li>
                     <li><a href="{{ url_for('auth.admin_panel') }}">Администрирование</a></li>
                 </ul>
             </div>

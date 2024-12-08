@@ -126,16 +126,6 @@
         </div>
     </section>
 
-    <!-- Новости -->
-    <section class="news-section">
-        <h2>Последние обновления</h2>
-        <ul class="news-list">
-            <li><strong>Обновление 2.0:</strong> Новый интерфейс и улучшенная безопасность данных.</li>
-            <li><strong>Добавлена интеграция:</strong> С популярными системами CRM.</li>
-            <li><strong>Скидки:</strong> На профессиональные тарифы до конца месяца.</li>
-        </ul>
-    </section>
-
     <!-- FAQ -->
     <section class="faq-section">
         <h2>Часто задаваемые вопросы</h2>
@@ -176,15 +166,8 @@
     </section>
     
 
-    <!-- Призыв к действию -->
-    <section class="cta-section">
-        <h2>Попробуйте Xecure бесплатно</h2>
-        <p>Зарегистрируйтесь прямо сейчас и оцените удобство нашей платформы.</p>
-        <a href="{{ url_for('auth.signup') }}" class="button">Начать бесплатно</a>
-    </section>
-
-      <!-- Отзывы -->
-      <section class="testimonials-section">
+     <!-- Отзывы -->
+     <section class="testimonials-section">
         <h2>Отзывы наших клиентов</h2>
         <div class="testimonials-grid">
             <div class="testimonial-item">
@@ -207,7 +190,27 @@
             </div>
         </div>
     </section>
+
     
+    <!-- Призыв к действию -->
+    <section class="cta-section">
+        <h2>Попробуйте Xecure бесплатно</h2>
+        <p>Зарегистрируйтесь прямо сейчас и оцените удобство нашей платформы.</p>
+        <a href="{{ url_for('auth.signup') }}" class="button">Начать бесплатно</a>
+    </section>
+
+     
+    
+
+      <!-- Новости -->
+      <section class="news-section">
+        <h2>Последние обновления</h2>
+        <ul class="news-list">
+            <li><strong>Обновление 2.0:</strong> Новый интерфейс и улучшенная безопасность данных.</li>
+            <li><strong>Добавлена интеграция:</strong> С популярными системами CRM.</li>
+            <li><strong>Скидки:</strong> На профессиональные тарифы до конца месяца.</li>
+        </ul>
+    </section>
    
 </div>
 {% endblock %}

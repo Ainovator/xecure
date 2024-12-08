@@ -38,7 +38,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.2rem 2rem;
+    padding: 1rem 2rem;
     margin: 0 100px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -54,7 +54,9 @@ header .logo h1 {
     font-weight: bold;
     color: #ffffff;
     text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6;
-   
+    margin: 0;  /* Убираем возможный отступ */
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание */
 }
 
 header nav ul {

@@ -13,6 +13,19 @@ from app.routes.auth_routes import auth
 @auth.route('/profile')
 @login_required
 def profile():
+
+    # Запросы, ожидающие одобрения
+    active_requests = ReportAccessRequest.query.filter_by(
+        user_id=current_user.id,
+        approved=False
+    ).all()
+
+    # Одобренные запросы
+    approved_requests = ReportAccessRequest.query.filter_by(
+        user_id=current_user.id,
+        approved=True
+    ).filter(ReportAccessRequest.access_expiration > datetime.utcnow()).all()
+
     token = request.args.get('token')
     print(f"Token received: {token}")  # Отладка
 
@@ -30,5 +43,5 @@ def profile():
         return redirect(url_for('auth.login'))
 
     user = User.query.get(int(user_id))
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=user, active_requests=active_requests, approved_requests=approved_requests)
 
