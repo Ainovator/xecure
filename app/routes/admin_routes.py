@@ -50,7 +50,7 @@ def admin_panel():
 
         return redirect(url_for('auth.admin_panel'))
 
-    return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests)
+    return render_template('admin_panel.html', users=users, reports=reports, requests=access_request)
 
 
 
