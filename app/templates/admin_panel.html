@@ -145,21 +145,13 @@
             <!-- Новый модуль "Действия" -->
             <div class="module">
                 <h3>Действия</h3>
-                {% for report in reports %}
-                        <tr>
-                            <td>{{ report.id }}</td>
-                            <td>{{ report.title }}</td>
-                            <td>{{ report.content[:100] }}...</td>
-                            <td>
-                                <form action="{{ url_for('auth.admin_panel') }}" method="POST">
-                                    <input type="hidden" name="report_id" value="{{ report.id }}">
-                                    <button type="submit" class="delete-button">
-                                        <span class="delete-icon">🗑️</span> Удалить
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                {% endfor %}>
+                <ul>
+                    <li>
+                        <button class="action-button" onclick="location.href='{{ url_for('auth.create_report') }}';">
+                            <span class="tab-icon">➕</span> Создать отчёт
+                        </button>
+                    </li>
+                </ul>
             </div>
         </nav>
     </aside>
