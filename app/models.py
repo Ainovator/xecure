@@ -43,6 +43,22 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}>'
 
 
+class UserActionLog(db.Model):
+    #создание колонки id лога типа integer , с уникальным значением
+    id = db.Column(db.Integer, primary_key=True)
+    #создание колонки id пользователя типа integer , с обменом инфы из бд user и последующим удалением логов в случае удаления пользователя 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    #создание колонки action в которой описанно действие пользователя
+    action = db.Column(db.String(255), nullable=False)
+    #создание колонки timestamp в которой пишется время действия пользователя
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('action_logs', lazy='dynamic'))
+
+    def repr(self):
+        return f'<UserActionLog user_id={self.user_id}, action="{self.action}", timestamp={self.timestamp}>'
+
+
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)

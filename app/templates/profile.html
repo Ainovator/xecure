@@ -75,11 +75,15 @@
         
         <div class="profile-section">
             <h2>Последние действия</h2>
-            <ul class="activity-list">
-                <li><p>Загрузили отчёт "Финансовый анализ".</p></li>
-                <li><p>Запросили доступ к отчёту "Годовой отчёт".</p></li>
-                <li><p>Обновили профиль.</p></li>
-            </ul>
+            {% for logs in logs_user %}
+                <li>
+                    <p><strong>Пользователь:</strong> {{ user.username }}</p>
+                    <p><strong>Событие:</strong> {{ logs.action }}</p>    
+                    <p><strong>Событие:</strong> {{ logs.timestamp }}</p>      
+  
+      
+                </li>
+            {% endfor %}
         </div>
     </div>
 </div>
