@@ -32,7 +32,7 @@
                                 <form action="{{ url_for('auth.delete_user') }}" method="POST">
                                     <input type="hidden" name="user_id" value="{{ user.id }}">
                                     <button type="submit" class="delete-button">
-                                        <span class="delete-icon">🗑️</span> Удалить
+                                        <span class="delete-icon">🗑</span> Удалить
                                     </button>
                                 </form>
                             </td>
@@ -70,7 +70,7 @@
                                 <form action="{{ url_for('auth.admin_panel') }}" method="POST">
                                     <input type="hidden" name="report_id" value="{{ report.id }}">
                                     <button type="submit" class="delete-button">
-                                        <span class="delete-icon">🗑️</span> Удалить
+                                        <span class="delete-icon">🗑</span> Удалить
                                     </button>
                                 </form>
                             </td>
@@ -84,7 +84,7 @@
             {% endif %}
         </section>
 
-        <!-- Вкладка "Запросы" -->
+<!-- Вкладка "Запросы" -->
         <section id="requests-tab" class="tab-content">
             <h1>Запросы на доступ</h1>
             {% if requests %}

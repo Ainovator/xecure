@@ -10,6 +10,7 @@ from functools import wraps
 from datetime import timedelta, datetime
 from app.routes.auth_routes import auth
 from .admin_routes import admin_required
+from app.utils import log_user_action
 
 def remove_expired_requests():
     """Удаляет все просроченные запросы на доступ."""
@@ -114,6 +115,7 @@ def request_access(report_id):
     db.session.commit()
 
     flash('Ваш запрос на доступ отправлен. Ожидайте одобрения.', 'success')
+    log_user_action(current_user.id,f'Отправлен запрос на одобрение отчета: {report.title}' )
     return redirect(url_for('auth.finance'))
 
 @auth.route('/reject_request/<int:request_id>', methods=['POST'])
@@ -132,7 +134,10 @@ def reject_request(request_id):
     db.session.add(rejected_request)
     db.session.delete(access_request)
     db.session.commit()
-
+    report_id = rejected_request.report_id
+    report = Report.query.get(report_id)
+    report_title = report.title
+    log_user_action(current_user.id,f'Запрос на доступ отклонён: {report.title}' )
     flash('Запрос на доступ отклонён.', 'success')
     return redirect(url_for('auth.admin_panel'))
 
