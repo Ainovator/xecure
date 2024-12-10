@@ -7,6 +7,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(20), default="user")
+    lvl = db.Column(db.Integer, nullable=True, default=0)
 
     access_requests = db.relationship(
         'ReportAccessRequest',
@@ -66,6 +67,7 @@ class Report(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     approved = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    lvl = db.Column(db.Integer, nullable=True)  # Уровень, связанный с пользователем
     user = db.relationship('User', backref=db.backref('reports', lazy=True))
 
     access_requests = db.relationship(
@@ -75,7 +77,8 @@ class Report(db.Model):
     )
 
     def __repr__(self):
-        return f'<Report {self.title}>'
+        return f'<Report {self.title} lvl={self.lvl}>'
+
 
 
 class ReportAccessRequest(db.Model):
