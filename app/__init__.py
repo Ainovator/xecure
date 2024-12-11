@@ -5,6 +5,9 @@ from app.routes.auth_routes import auth
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 import sqlite3
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from app.models import *
 
 def create_app():
     app = Flask(__name__)
@@ -16,6 +19,10 @@ def create_app():
     # Инициализация базы данных
     db.init_app(app)
     migrate = Migrate(app, db)
+    admin = Admin(app, name='My Admin Panel', template_mode='bootstrap4')
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Report, db.session))
+
 
     # Включение поддержки внешних ключей в SQLite
     @event.listens_for(Engine, "connect")
