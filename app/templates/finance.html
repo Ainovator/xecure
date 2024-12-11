@@ -4,7 +4,6 @@
 
 {% set page_class = "image-background" %}
 
-
 {% block content %}
 <div class="finance-container">
     <h1>Финансовые отчеты</h1>
@@ -31,13 +30,10 @@
                         <a href="{{ url_for('auth.view_report', report_id=report.id) }}" class="btn btn-success">Посмотреть отчет</a>
                     {% endif %}
                 </div>
-
-                
             {% endfor %}
         </div>
     {% else %}
         <p>Нет доступных отчетов.</p>
     {% endif %}
-
- 
+</div>
 {% endblock %}

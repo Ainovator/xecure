@@ -12,10 +12,6 @@ from app.routes.auth_routes import auth
 from app.extensions import login_manager
 
 
-
-
-
-
 @auth.route('/check-session', methods=['GET'])
 @login_required
 def check_session():
@@ -27,8 +23,3 @@ def check_session():
         return jsonify({'message': 'Session expired'}), 401
 
     return jsonify({'message': 'Session active'}), 200
-
-
-
-
-
