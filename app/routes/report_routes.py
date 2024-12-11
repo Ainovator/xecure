@@ -40,8 +40,9 @@ def create_report():
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
-
-        new_report = Report(title=title, content=content, user_id=current_user.id)
+        type = request.form.get('type')
+        lvl_report = request.form.get('lvl')
+        new_report = Report(title=title, content=content, user_id=current_user.id, type_report = type, lvl = lvl_report)
         db.session.add(new_report)
         db.session.commit()
 
