@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
-from app.models import User, Report, ReportAccessRequest
+from app.models import User, Report, ReportAccessRequest, UserActionLog
 from . import db
 from app.routes.auth_routes import auth
 from functools import wraps
@@ -65,6 +65,9 @@ def delete_user():
         if user_to_delete.username == current_user.username:
             flash('Вы не можете удалить свой собственный аккаунт.', 'error')
             return redirect(url_for('auth.admin_panel'))
+
+        # Удаление связанных логов перед удалением пользователя
+        UserActionLog.query.filter_by(user_id=user_id).delete()
 
         db.session.delete(user_to_delete)
         db.session.commit()
