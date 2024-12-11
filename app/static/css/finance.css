@@ -120,6 +120,74 @@ p.no-reports {
     font-size: 20px;
 }
 
+/* Контейнер для фильтра */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Форма фильтра */
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Метка фильтра */
+.filter-label {
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Выпадающий список */
+.filter-select {
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    appearance: none;
+}
+
+.filter-select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #007bff;
+}
+
+.filter-select option {
+    background: #1a2635;
+    color: #fff;
+}
+
+/* Кнопка фильтра */
+.filter-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 10px #007bff;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #007bff);
+    box-shadow: 0 0 20px #007bff;
+}
 
 
 

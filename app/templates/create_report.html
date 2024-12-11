@@ -10,10 +10,16 @@
             <label for="lvl" class="report-label">Уровень отчета</label>
             <input type="text" id="lvl" name="lvl" class="report-input" required>
         </div>
-        <div class="report-field">
-            <label for="type" class="report-label">Тип отчета</label>
-            <input type="text" id="type" name="type" class="report-input" required>
+        <div class="filter-container">
+            <label for="type-filter" class="filter-label">Фильтр по типу отчета:</label>
+            <select id="type-filter" name="type" class="filter-select">
+                <option value="">Все</option>
+                <option value="Финансовый">Финансовый</option>
+                <option value="Аналитический">Аналитический</option>
+                <option value="Стратегический">Стратегический</option>
+            </select>
         </div>
+        
         <div class="report-field">
             <label for="title" class="report-label">Заголовок отчета</label>
             <input type="text" id="title" name="title" class="report-input" required>

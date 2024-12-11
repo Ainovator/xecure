@@ -21,12 +21,13 @@
     <form id="edit-form" class="edit-form hidden" method="POST" action="{{ url_for('auth.update_report', report_id=report.id) }}">
         <label for="title">Заголовок:</label>
         <input type="text" id="title" name="title" value="{{ report.title }}" required>
-
+    
         <label for="content">Содержание:</label>
         <textarea id="content" name="content" required>{{ report.content }}</textarea>
-
+    
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
+    
 </div>
 
 

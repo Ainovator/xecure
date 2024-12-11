@@ -18,8 +18,22 @@
                     {% for log in history %}
                         <tr>
                             <td>{{ log.changed_at }}</td>
-                            <td>{{ log.user_id }}</td>
-                            <td>{{ log.change_summary }}</td>
+                            <td>{{ log.user.username }}</td>
+                            <td>
+                                {% if 'error' in log.change_summary_parsed %}
+                                    <p class="error">{{ log.change_summary_parsed.error }}</p>
+                                {% else %}
+                                    <ul>
+                                        {% for field, old_value in log.change_summary_parsed.old_data.items() %}
+                                        <li>
+                                            <strong>{{ field|capitalize }}</strong>: 
+                                            <span class="old-value">{{ old_value }}</span> → 
+                                            <span class="new-value">{{ log.change_summary_parsed.new_data[field] }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

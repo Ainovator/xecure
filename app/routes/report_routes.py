@@ -6,6 +6,7 @@ from . import db
 from app.routes.auth_routes import auth
 from .admin_routes import admin_required
 from app.utils import log_user_action
+import json
 
 
 # Вспомогательные функции
@@ -74,7 +75,7 @@ def approve_report(report_id):
         flash('Некорректное время доступа. Укажите положительное число.', 'error')
         return redirect(url_for('auth.admin_panel'))
 
-    access_expiration = datetime.utcnow() + timedelta(seconds=access_duration)
+    access_expiration = datetime.utcnow().replace(microsecond=0) + timedelta(seconds=access_duration)
     remove_expired_requests()
 
     access_request = ReportAccessRequest.query.filter_by(report_id=report.id, approved=False).first()
@@ -110,14 +111,14 @@ def request_access(report_id):
 
     existing_request = get_existing_access_request(current_user.id, report.id)
     if existing_request:
-        if existing_request.access_expiration < datetime.utcnow():
+        if existing_request.access_expiration < datetime.utcnow().replace(microsecond=0):
             db.session.delete(existing_request)
             db.session.commit()
         else:
             flash('Ваш запрос уже ожидает одобрения.', 'info')
             return redirect(url_for('auth.finance'))
 
-    access_expiration = datetime.utcnow() + timedelta(hours=24)
+    access_expiration = datetime.utcnow().replace(microsecond=0) + timedelta(hours=24)
     new_request = ReportAccessRequest(
         user_id=current_user.id,
         report_id=report.id,
@@ -178,7 +179,7 @@ def view_report(report_id):
         flash('Вы не запрашивали доступ к этому отчёту.', 'error')
         return redirect(url_for('auth.finance'))
 
-    if access_request.access_expiration < datetime.utcnow():
+    if access_request.access_expiration < datetime.utcnow().replace(microsecond=0):
         db.session.delete(access_request)
         db.session.commit()
         flash('Срок действия доступа истёк. Запросите доступ снова.', 'error')
@@ -192,15 +193,38 @@ def view_report(report_id):
 # Эндпоинт для изменения отчёта
 @auth.route('/report/<int:report_id>', methods=['POST'])
 def update_report(report_id):
-    title = request.form.get('title')  # Получение данных из формы
+    # Получение данных из формы
+    title = request.form.get('title')
     content = request.form.get('content')
 
+    # Проверяем существование отчёта
     report = Report.query.get(report_id)
     if not report:
         return jsonify({'error': 'Report not found'}), 404
 
+    # Сохраняем старые данные для логирования
+    old_data = {"title": report.title, "content": report.content}
+
+    # Обновляем данные отчёта
     report.title = title
     report.content = content
+
+    # Логируем изменения
+    change_summary = {
+        "old_data": old_data,
+        "new_data": {"title": title, "content": content}
+    }
+
+    # Создание записи в логах изменений
+    change_log = ReportChangeLog(
+        report_id=report.id,
+        user_id=current_user.id,  # Используем текущего пользователя
+        changed_at=datetime.utcnow().replace(microsecond=0),
+        change_summary=json.dumps(change_summary)  # Преобразование в JSON
+    )
+
+    # Добавляем лог изменений в базу данных
+    db.session.add(change_log)
     db.session.commit()
 
     return redirect(url_for('auth.view_report', report_id=report_id))
@@ -220,4 +244,25 @@ def report_history(report_id):
 
     history = ReportChangeLog.query.filter_by(report_id=report_id).all()
 
+    for log in history:
+        try:
+            log.change_summary_parsed = json.loads(log.change_summary)  # Парсим JSON
+        except json.JSONDecodeError:
+            log.change_summary_parsed = {"error": "Некорректный формат изменений"}
+
     return render_template('report_history.html', report=report, history=history)
+
+
+@auth.route('/reports', methods=['GET'])
+@login_required
+def reports():
+    """
+    Отображение списка отчетов с фильтрацией по типу.
+    """
+    report_type = request.args.get('type', '')  # Получаем тип отчета из параметров запроса
+    if report_type:
+        reports = Report.query.filter_by(type_report=report_type).all()
+    else:
+        reports = Report.query.all()
+
+    return render_template('reports.html', reports=reports)

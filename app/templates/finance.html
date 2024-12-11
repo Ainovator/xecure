@@ -7,6 +7,25 @@
 {% block content %}
 <div class="finance-container">
     <h1>Финансовые отчеты</h1>
+    <div class="filter-container">
+        <form method="GET" action="{{ url_for('auth.finance') }}" class="filter-form" id="filter-form">
+            <label for="type-filter" class="filter-label">Фильтр по типу отчета:</label>
+            <select id="type-filter" name="type" class="filter-select" onchange="submitFilterForm()">
+                <option value="">Все</option>
+                <option value="Финансовый">Финансовый</option>
+                <option value="Аналитический">Аналитический</option>
+                <option value="Стратегический">Стратегический</option>
+            </select>
+        </form>
+    </div>
+
+    <script>
+        function submitFilterForm() {
+            document.getElementById('filter-form').submit();
+        }
+    </script>
+    
+    
     {% if reports %}
         <div class="reports-list">
             {% for report in reports %}

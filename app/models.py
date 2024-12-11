@@ -68,14 +68,37 @@ class Report(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     lvl = db.Column(db.Integer, nullable=True, default=0)  # Уровень, связанный с пользователем
 
+    # Отношение к запросам на доступ
     access_requests = db.relationship(
         'ReportAccessRequest',
         backref='parent_report',
         cascade='all, delete-orphan'
     )
 
+    # Отношение к логам изменений с каскадным удалением
+    change_logs = db.relationship(
+        'ReportChangeLog',
+        backref='report',  # Установим обратную связь
+        cascade='all, delete-orphan',  # Включим каскадное удаление
+        lazy=True
+    )
+
     def __repr__(self):
         return f'<Report {self.title} lvl={self.lvl}>'
+
+
+
+class ReportChangeLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    changed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    change_summary = db.Column(db.Text, nullable=False)  # JSON или описание изменений
+
+    user = db.relationship('User', backref='change_logs')  # Отношение с пользователем
+
+    def __repr__(self):
+        return f'<ReportChangeLog report_id={self.report_id} by user_id={self.user_id}>'
 
 
 class ReportAccessRequest(db.Model):
@@ -128,13 +151,3 @@ class RejectedRequest(db.Model):
     def __repr__(self):
         return f'<RejectedRequest user_id={self.user_id}, report_id={self.report_id}>'
 
-# Модель для записи логов изменений
-class ReportChangeLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
-    changed_at = db.Column(db.DateTime, default=datetime.utcnow)
-    change_summary = db.Column(db.Text, nullable=False)  # JSON или описание изменений
-
-    def __repr__(self):
-        return f'<ReportChangeLog report_id={self.report_id} by user_id={self.user_id}>'
