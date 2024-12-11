@@ -67,9 +67,8 @@ class Report(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     approved = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    lvl = db.Column(db.Integer, nullable=True)  # Уровень, связанный с пользователем
-    user = lvl = db.Column(db.Integer, nullable=True, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
+    lvl = db.Column(db.Integer, nullable=True, default=0) # Уровень, связанный с пользователем
 
     access_requests = db.relationship(
         'ReportAccessRequest',
