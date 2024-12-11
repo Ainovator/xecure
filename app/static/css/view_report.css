@@ -1,0 +1,192 @@
+/* Общие стили для просмотра отчета */
+.hidden {
+    display: none;
+}
+
+.report-view-container {
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 2rem auto;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.report-header h1 {
+    font-size: 24px;
+    color: #00e6e6;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6;
+}
+
+.report-content p {
+    font-size: 18px;
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.edit-form label {
+    font-size: 16px;
+    margin-top: 1rem;
+    color: #fff;
+}
+
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+}
+
+.edit-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.edit-form button {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+
+.report-view-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: left;
+}
+
+.report-header {
+    margin-bottom: 2rem;
+}
+
+.report-header h1 {
+    font-size: 28px;
+    color: #00e6e6;
+    text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6;
+    margin-bottom: 0.5rem;
+}
+
+.report-header #report-date {
+    font-size: 14px;
+    color: #ddd;
+    text-shadow: none;
+}
+
+.report-content {
+    margin-bottom: 2rem;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #eee;
+}
+
+.report-content p {
+    margin: 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+    box-shadow: 0 0 10px #007bff;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    box-shadow: 0 0 20px #007bff;
+}
+
+.toggle-edit-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Плавный переход от светлого к темному синему */
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Синее свечение */
+}
+
+.toggle-edit-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003a75); /* Более темный синий при наведении */
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.7); /* Увеличенное свечение */
+    transform: translateY(-2px); /* Легкое поднятие */
+}
+
+.toggle-edit-btn:active {
+    background: linear-gradient(135deg, #003a75, #002752); /* Самый темный синий при нажатии */
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.9); /* Яркое свечение */
+    transform: translateY(0); /* Возврат в исходное состояние */
+}
+
+.edit-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.edit-form.hidden {
+    display: none;
+}
+
+.edit-form label {
+    font-size: 16px;
+    color: #fff;
+}
+
+.edit-form input,
+.edit-form textarea {
+    width: 100%; /* Задаём одинаковую ширину */
+    padding: 0.9rem 1rem; /* Внутренние отступы */
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    outline: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Включаем отступы и границы в расчёт ширины */
+}
+
+.edit-form textarea {
+    resize: vertical; /* Только вертикальное изменение размера */
+    min-height: 150px; /* Высота для textarea */
+}
+
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.edit-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}

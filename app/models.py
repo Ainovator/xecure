@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from . import db
 from datetime import datetime, timedelta
 
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -15,7 +16,7 @@ class User(UserMixin, db.Model):
         cascade='all, delete-orphan',
         lazy=True
     )
-    
+
     def _get_report_access_request(self, report_id):
         """Универсальный метод для получения запроса на доступ к отчету."""
         return ReportAccessRequest.query.filter_by(user_id=self.id, report_id=report_id).first()
@@ -45,40 +46,36 @@ class User(UserMixin, db.Model):
 
 
 class UserActionLog(db.Model):
-    #создание колонки id лога типа integer , с уникальным значением
     id = db.Column(db.Integer, primary_key=True)
-    #создание колонки id пользователя типа integer , с обменом инфы из бд user и последующим удалением логов в случае удаления пользователя 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
-    #создание колонки action в которой описанно действие пользователя
     action = db.Column(db.String(255), nullable=False)
-    #создание колонки timestamp в которой пишется время действия пользователя
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('action_logs', lazy='dynamic'))
 
-    def repr(self):
-        return f'<UserActionLog user_id={self.user_id}, action="{self.action}", timestamp={self.timestamp}>'
+    def __repr__(self):
+        return (f'<UserActionLog user_id={self.user_id}, '
+                f'action="{self.action}", timestamp={self.timestamp}>')
 
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    type_report = db.Column(db.String(255), nullable=False) #тип отчета
+    type_report = db.Column(db.String(255), nullable=False)  # Тип отчета
     title = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     approved = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
-    lvl = db.Column(db.Integer, nullable=True, default=0) # Уровень, связанный с пользователем
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    lvl = db.Column(db.Integer, nullable=True, default=0)  # Уровень, связанный с пользователем
 
     access_requests = db.relationship(
         'ReportAccessRequest',
-        backref='parent_report', 
+        backref='parent_report',
         cascade='all, delete-orphan'
     )
 
     def __repr__(self):
         return f'<Report {self.title} lvl={self.lvl}>'
-
 
 
 class ReportAccessRequest(db.Model):
@@ -96,13 +93,13 @@ class ReportAccessRequest(db.Model):
     access_expiration = db.Column(db.DateTime, nullable=False)
     approved = db.Column(db.Boolean, default=False)
 
-    # Назначение уникального имени для backref
-    user = db.relationship('User', backref=db.backref('user_access_requests', cascade='all, delete-orphan'))
+    user = db.relationship(
+        'User',
+        backref=db.backref('user_access_requests', cascade='all, delete-orphan')
+    )
 
     def __repr__(self):
         return f'<ReportAccessRequest user_id={self.user_id}, report_id={self.report_id}>'
-
-
 
 
 class RejectedRequest(db.Model):
@@ -130,3 +127,14 @@ class RejectedRequest(db.Model):
 
     def __repr__(self):
         return f'<RejectedRequest user_id={self.user_id}, report_id={self.report_id}>'
+
+# Модель для записи логов изменений
+class ReportChangeLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    changed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    change_summary = db.Column(db.Text, nullable=False)  # JSON или описание изменений
+
+    def __repr__(self):
+        return f'<ReportChangeLog report_id={self.report_id} by user_id={self.user_id}>'

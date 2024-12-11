@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}История изменений отчёта{% endblock %}
+
+{% block content %}
+    <div class="history-container">
+        <h1>История изменений отчёта: {{ report.title }}</h1>
+        {% if history %}
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Дата изменения</th>
+                        <th>Пользователь</th>
+                        <th>Изменения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in history %}
+                        <tr>
+                            <td>{{ log.changed_at }}</td>
+                            <td>{{ log.user_id }}</td>
+                            <td>{{ log.change_summary }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>История изменений отсутствует.</p>
+        {% endif %}
+        <a href="{{ url_for('auth.admin_panel') }}" class="back-button">Назад</a>
+    </div>
+{% endblock %}

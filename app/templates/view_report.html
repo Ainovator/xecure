@@ -3,8 +3,42 @@
 {% block title %}Просмотр отчета{% endblock %}
 
 {% block content %}
-    <div class="admin-panel-container">
-        <h1>{{ report.title }}</h1>
-        <p>{{ report.content }}</p>
+<div class="report-view-container">
+    <!-- Контейнер заголовка и содержания -->
+    <div id="view-mode">
+        <div class="report-header">
+            <h1 id="report-title">{{ report.title }}</h1>
+            <p id="report-date">Дата создания: {{ report.created_at }}</p>
+        </div>
+        <div class="report-content">
+            <p id="report-content">{{ report.content }}</p>
+        </div>
+        <!-- Кнопка редактирования -->
+        <button class="btn toggle-edit-btn" onclick="toggleEditForm()">Редактировать</button>
     </div>
+
+    <!-- Форма редактирования -->
+    <form id="edit-form" class="edit-form hidden" method="POST" action="{{ url_for('auth.update_report', report_id=report.id) }}">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" value="{{ report.title }}" required>
+
+        <label for="content">Содержание:</label>
+        <textarea id="content" name="content" required>{{ report.content }}</textarea>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+
+
+<script>
+    function toggleEditForm() {
+        const viewMode = document.getElementById('view-mode'); // Элементы просмотра
+        const editForm = document.getElementById('edit-form'); // Форма редактирования
+
+        // Переключаем видимость
+        viewMode.classList.toggle('hidden');
+        editForm.classList.toggle('hidden');
+    }
+</script>
+
 {% endblock %}

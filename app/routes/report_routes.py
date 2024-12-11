@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from datetime import timedelta, datetime
-from app.models import Report, ReportAccessRequest, RejectedRequest
+from app.models import *
 from . import db
 from app.routes.auth_routes import auth
 from .admin_routes import admin_required
@@ -186,3 +186,38 @@ def view_report(report_id):
 
     report = Report.query.get(report_id)
     return render_template('view_report.html', report=report)
+
+
+
+# Эндпоинт для изменения отчёта
+@auth.route('/report/<int:report_id>', methods=['POST'])
+def update_report(report_id):
+    title = request.form.get('title')  # Получение данных из формы
+    content = request.form.get('content')
+
+    report = Report.query.get(report_id)
+    if not report:
+        return jsonify({'error': 'Report not found'}), 404
+
+    report.title = title
+    report.content = content
+    db.session.commit()
+
+    return redirect(url_for('auth.view_report', report_id=report_id))
+
+
+@auth.route('/report/<int:report_id>/history', methods=['GET'])
+@login_required
+@admin_required
+def report_history(report_id):
+    """
+    Просмотр истории изменений отчёта.
+    """
+    report = Report.query.get(report_id)
+    if not report:
+        flash('Отчёт не найден.', 'error')
+        return redirect(url_for('auth.admin_panel'))
+
+    history = ReportChangeLog.query.filter_by(report_id=report_id).all()
+
+    return render_template('report_history.html', report=report, history=history)
