@@ -38,9 +38,7 @@
                         <p class="text-danger">Ваш запрос на доступ был отклонён администратором.</p>
                     {% elif not current_user.has_requested_access(report.id) %}
                         <!-- Кнопка запроса доступа -->
-                        <form action="{{ url_for('auth.request_access', report_id=report.id) }}" method="POST">
-                            <button type="submit" class="btn btn-primary">Запросить доступ</button>
-                        </form>
+                        <button type="button" class="btn btn-primary" id="open-modal-btn">Запросить доступ</button>
                     {% elif current_user.has_requested_access(report.id) and not current_user.has_access_to_report(report.id) %}
                         <!-- Ожидание одобрения -->
                         <p>Ваш запрос на доступ ещё не одобрен.</p>
@@ -54,5 +52,42 @@
     {% else %}
         <p>Нет доступных отчетов.</p>
     {% endif %}
+
+    
+    <!-- Модальное окно -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal-btn">&times;</button>
+            <h2>Запрос доступа</h2>
+            <form action="{{ url_for('auth.request_access', report_id=report.id) }}" method="POST">
+                <textarea name="request_reason" placeholder="Введите причину запроса..." required></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Элементы управления модальным окном
+        const modal = document.getElementById('modal');
+        const openModalBtn = document.getElementById('open-modal-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        // Открытие модального окна
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        // Закрытие модального окна
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Закрытие модального окна при клике вне его содержимого
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+    
 </div>
 {% endblock %}

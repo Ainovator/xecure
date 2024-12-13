@@ -215,6 +215,7 @@ def update_report(report_id):
         "new_data": {"title": title, "content": content}
     }
 
+
     # Создание записи в логах изменений
     change_log = ReportChangeLog(
         report_id=report.id,
