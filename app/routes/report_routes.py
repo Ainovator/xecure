@@ -119,10 +119,12 @@ def request_access(report_id):
             return redirect(url_for('auth.finance'))
 
     access_expiration = datetime.utcnow().replace(microsecond=0) + timedelta(hours=24)
+    request_purpose = request.form.get('request_reason')
     new_request = ReportAccessRequest(
         user_id=current_user.id,
         report_id=report.id,
-        access_expiration=access_expiration
+        access_expiration=access_expiration,
+        request_purpose = request_purpose
     )
     db.session.add(new_request)
     db.session.commit()

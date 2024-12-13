@@ -39,6 +39,17 @@
                     {% elif not current_user.has_requested_access(report.id) %}
                         <!-- Кнопка запроса доступа -->
                         <button type="button" class="btn btn-primary" id="open-modal-btn">Запросить доступ</button>
+                          <!-- Модальное окно -->
+                        <div class="modal" id="modal">
+                            <div class="modal-content">
+                                <button class="modal-close" id="close-modal-btn">&times;</button>
+                                <h2>Запрос доступа</h2>
+                                <form action="{{ url_for('auth.request_access', report_id=report.id) }}" method="POST">
+                                    <textarea name="request_reason" placeholder="Введите причину запроса..." required></textarea>
+                                    <button type="submit">Отправить</button>
+                                </form>
+                            </div>
+                        </div>
                     {% elif current_user.has_requested_access(report.id) and not current_user.has_access_to_report(report.id) %}
                         <!-- Ожидание одобрения -->
                         <p>Ваш запрос на доступ ещё не одобрен.</p>
@@ -54,17 +65,7 @@
     {% endif %}
 
     
-    <!-- Модальное окно -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="close-modal-btn">&times;</button>
-            <h2>Запрос доступа</h2>
-            <form action="{{ url_for('auth.request_access', report_id=report.id) }}" method="POST">
-                <textarea name="request_reason" placeholder="Введите причину запроса..." required></textarea>
-                <button type="submit">Отправить</button>
-            </form>
-        </div>
-    </div>
+  
     <script>
         // Элементы управления модальным окном
         const modal = document.getElementById('modal');

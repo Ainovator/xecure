@@ -101,6 +101,7 @@
                         <div class="request-card">
                             <h4>Отчёт: {{ request.parent_report.title }}</h4>
                             <p><strong>От кого запрос:</strong> {{ request.user.username }}</p>
+                            <p><strong>Цель запроса:</strong> {{ request.request_purpose }}</p>
                             <div class="request-actions">
                                 {% if not request.approved %}
                                     <form action="{{ url_for('auth.approve_report', report_id=request.parent_report.id) }}" method="POST">

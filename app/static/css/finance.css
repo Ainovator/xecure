@@ -203,6 +203,7 @@ p.no-reports {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    
 }
 
 .modal-content {
@@ -216,13 +217,16 @@ p.no-reports {
 }
 
 .modal-content textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
+    width: 100%; /* Задаём одинаковую ширину */
+    padding: 0.9rem 1rem; /* Внутренние отступы */
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    outline: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Включаем отступы и границы в расчёт ширины */
 }
 
 .modal-content button {

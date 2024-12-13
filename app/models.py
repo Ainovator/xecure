@@ -12,9 +12,7 @@ class User(UserMixin, db.Model):
 
     access_requests = db.relationship(
         'ReportAccessRequest',
-        backref='requesting_user',  # Изменено имя backref
-        cascade='all, delete-orphan',
-        lazy=True
+        back_populates='user'
     )
 
     def _get_report_access_request(self, report_id):
@@ -103,7 +101,12 @@ class ReportChangeLog(db.Model):
 
 class ReportAccessRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    request_purpose = db.Column(db.String(255), nullable = False)
+    request_purpose = db.Column(
+        db.String(255), 
+        nullable=False, 
+        default="Неизвестно", 
+        server_default="Неизвестно"
+    )
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('user.id', ondelete='CASCADE'),
@@ -115,15 +118,24 @@ class ReportAccessRequest(db.Model):
         nullable=False
     )
     access_expiration = db.Column(db.DateTime, nullable=False)
-    approved = db.Column(db.Boolean, default=False)
+    approved = db.Column(
+        db.Boolean, 
+        default=False, 
+        server_default="0"
+    )
 
+    # Отношение с пользователем
     user = db.relationship(
         'User',
-        backref=db.backref('user_access_requests', cascade='all, delete-orphan')
+        back_populates='access_requests',
+        overlaps="requesting_user"
     )
 
     def __repr__(self):
-        return f'<ReportAccessRequest user_id={self.user_id}, report_id={self.report_id}>'
+        return (
+            f"<ReportAccessRequest user_id={self.user_id}, report_id={self.report_id}, "
+            f"approved={self.approved}, expires={self.access_expiration}>"
+        )
 
 
 class RejectedRequest(db.Model):

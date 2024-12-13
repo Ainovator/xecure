@@ -15,6 +15,7 @@ def finance():
     # Получение параметра фильтрации из строки запроса
     report_type = request.args.get('type')
     
+    
     # Если параметр фильтра указан, фильтруем отчёты по типу
     if report_type:
         reports = Report.query.filter_by(type_report=report_type).all()
