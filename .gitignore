@@ -17,6 +17,7 @@ logs/
 # Базы данных
 *.sqlite3
 *.db
+instance/  
 
 # Настройки IDE и редакторов
 .vscode/
