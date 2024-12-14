@@ -174,6 +174,30 @@
                 <p>Нет запросов на доступ.</p>
             {% endif %}
         </section>
+
+         <!-- Вкладка "Черный список" -->
+         <section id="blacklist-tab" class="tab-content">
+            <div class="rejected-requests-container">
+                <h1>Отклонённые запросы</h1>
+                {% if rejected_requests %}
+                    <div class="requests-list">
+                        {% for request in rejected_requests %}
+                            <div class="request-card">
+                                <h4>Отчёт: {{ request.report.title }}</h4>
+                                <p><strong>Пользователь:</strong> {{ request.user.username }}</p>
+                                <p><strong>Дата отклонения:</strong> {{ request.rejected_at }}</p>
+                                <form action="{{ url_for('auth.delete_rejected_request', request_id=request.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Нет отклонённых запросов.</p>
+                {% endif %}
+            </div>
+        </section>
+          
     </div>
 
     <!-- Боковая панель -->

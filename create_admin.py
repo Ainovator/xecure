@@ -10,6 +10,7 @@ app.app_context().push()
 username = 'admin'
 password = '12'
 role = 'admin'
+lvl = 3
 
 # Хешируем пароль
 hashed_password = generate_password_hash(password, method='pbkdf2:sha256')

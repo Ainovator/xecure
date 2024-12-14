@@ -119,10 +119,12 @@ def request_access(report_id):
             return redirect(url_for('auth.finance'))
 
     access_expiration = datetime.utcnow().replace(microsecond=0) + timedelta(hours=24)
+    request_purpose = request.form.get('request_reason')
     new_request = ReportAccessRequest(
         user_id=current_user.id,
         report_id=report.id,
-        access_expiration=access_expiration
+        access_expiration=access_expiration,
+        request_purpose = request_purpose
     )
     db.session.add(new_request)
     db.session.commit()
@@ -160,12 +162,15 @@ def reject_request(request_id):
 
 @auth.route('/rejected_requests', methods=['GET'])
 @login_required
+@admin_required
 def rejected_requests():
-    """
-    Просмотр отклонённых запросов для текущего пользователя.
-    """
-    rejections = RejectedRequest.query.filter_by(user_id=current_user.id).all()
-    return render_template('rejected_requests.html', rejections=rejections)
+    # Получаем все отклоненные запросы
+
+    return render_template(
+        'rejected_requests.html', 
+        user=current_user, 
+        rejected_requests=rejected_requests
+    )
 
 
 @auth.route('/view_report/<int:report_id>', methods=['GET'])
@@ -215,6 +220,7 @@ def update_report(report_id):
         "new_data": {"title": title, "content": content}
     }
 
+
     # Создание записи в логах изменений
     change_log = ReportChangeLog(
         report_id=report.id,
@@ -253,16 +259,21 @@ def report_history(report_id):
     return render_template('report_history.html', report=report, history=history)
 
 
-@auth.route('/reports', methods=['GET'])
-@login_required
-def reports():
-    """
-    Отображение списка отчетов с фильтрацией по типу.
-    """
-    report_type = request.args.get('type', '')  # Получаем тип отчета из параметров запроса
-    if report_type:
-        reports = Report.query.filter_by(type_report=report_type).all()
-    else:
-        reports = Report.query.all()
 
-    return render_template('reports.html', reports=reports)
+
+
+
+@auth.route('/delete_rejected_request/<int:request_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_rejected_request(request_id):
+    # Удаляем отклоненный запрос
+    rejected_request = RejectedRequest.query.get(request_id)
+    if rejected_request:
+        db.session.delete(rejected_request)
+        db.session.commit()
+        flash('Отклонение запроса успешно удалено.', 'success')
+    else:
+        flash('Отклоненный запрос не найден.', 'error')
+
+    return redirect(url_for('auth.admin_panel'))

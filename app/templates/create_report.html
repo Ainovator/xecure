@@ -6,18 +6,26 @@
 <div class="report-form-wrapper">
     <h1 class="report-title">Создать новый отчет</h1>
     <form method="POST">
-        <div class="report-field">
-            <label for="lvl" class="report-label">Уровень отчета</label>
-            <input type="text" id="lvl" name="lvl" class="report-input" required>
-        </div>
-        <div class="filter-container">
-            <label for="type-filter" class="filter-label">Фильтр по типу отчета:</label>
-            <select id="type-filter" name="type" class="filter-select">
-                <option value="">Все</option>
-                <option value="Финансовый">Финансовый</option>
-                <option value="Аналитический">Аналитический</option>
-                <option value="Стратегический">Стратегический</option>
-            </select>
+        <div class="select-block">        
+            <div class="report-field">
+                <label for="lvl" class="filter-label">Уровень отчета</label>
+                <select id="lvl" name="lvl" class="filter-select" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            
+            <div class="report-field">
+                <label for="type-filter" class="filter-label">Тип отчёта:</label>
+                <select id="type-filter" name="type" class="filter-select">
+                    <option value="">Все</option>
+                    <option value="Финансовый">Финансовый</option>
+                    <option value="Аналитический">Аналитический</option>
+                    <option value="Стратегический">Стратегический</option>
+                </select>
+            </div>
         </div>
         
         <div class="report-field">

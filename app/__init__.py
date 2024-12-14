@@ -27,9 +27,9 @@ def create_app():
     # Включение поддержки внешних ключей в SQLite
     @event.listens_for(Engine, "connect")
     def set_sqlite_pragma(dbapi_connection, connection_record):
-        if isinstance(dbapi_connection, sqlite3.Connection):  # Проверяем, что это SQLite
+        if isinstance(dbapi_connection, sqlite3.Connection):
             cursor = dbapi_connection.cursor()
-            cursor.execute("PRAGMA foreign_keys=ON;")  # Включаем поддержку внешних ключей
+            cursor.execute("PRAGMA foreign_keys=ON;")  
             cursor.close()
 
     # Инициализация менеджера входа

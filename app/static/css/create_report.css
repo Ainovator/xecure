@@ -108,3 +108,7 @@ body {
         width: 100%;
     }
 }
+
+.select-block {
+    display: flex;
+}
