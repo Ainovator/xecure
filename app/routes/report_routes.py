@@ -277,3 +277,21 @@ def delete_rejected_request(request_id):
         flash('Отклоненный запрос не найден.', 'error')
 
     return redirect(url_for('auth.admin_panel'))
+
+
+@auth.route('/check_access/<int:report_id>', methods=['GET'])
+@login_required
+def check_access(report_id):
+    access_request = ReportAccessRequest.query.filter_by(user_id=current_user.id, report_id=report_id).first()
+
+    if not access_request or not access_request.approved:
+        return jsonify({'access': False, 'message': 'Доступ отклонён или не предоставлен.'}), 403
+
+    if access_request.access_expiration < datetime.utcnow():
+        # Удаляем запись, если срок действия истёк
+        db.session.delete(access_request)
+        db.session.commit()
+        return jsonify({'access': False, 'message': 'Время доступа истекло.'}), 403
+
+    return jsonify({'access': True, 'message': 'Доступ активен.'}), 200
+

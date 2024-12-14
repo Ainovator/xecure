@@ -78,3 +78,27 @@ def delete_user():
         flash('Пользователь не найден.', 'error')
 
     return redirect(url_for('auth.admin_panel'))
+
+
+@auth.route('/update_user_level', methods=['POST'])
+@login_required
+def update_user_level():
+    user_id = request.form.get('user_id')
+    new_level = request.form.get('new_level')
+    
+    if not user_id or not new_level:
+        flash('Некорректные данные!', 'error')
+        return redirect(url_for('auth.admin_panel'))
+    
+    try:
+        user = User.query.get(user_id)
+        if user:
+            user.lvl = int(new_level)
+            db.session.commit()
+            flash('Уровень пользователя обновлен!', 'success')
+        else:
+            flash('Пользователь не найден!', 'error')
+    except Exception as e:
+        flash(f'Ошибка: {str(e)}', 'error')
+    
+    return redirect(url_for('auth.admin_panel'))

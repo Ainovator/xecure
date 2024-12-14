@@ -24,10 +24,3 @@ def load_user(user_id):
     Загрузка пользователя Flask-Login по его ID.
     """
     return User.query.get(int(user_id))  # Загружаем пользователя из базы данных по ID
-
-
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))  # Загружаем пользователя из базы данных по ID

@@ -100,6 +100,8 @@ section{
     align-items: center;
     gap: 5px;
     font-size: 14px;
+    font-size: 1rem; /* Единый размер шрифта */
+    line-height: 1;  /* Убираем влияние высоты строки */
 }
 
 .delete-button:hover {

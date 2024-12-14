@@ -27,9 +27,12 @@
     
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
-    
-</div>
 
+    <!-- Контейнер для уведомления о истечении времени -->
+    <div id="access-expired-message" class="hidden">
+        <p class="text-danger">Время доступа к отчету истекло. Вы будете перенаправлены на главную страницу.</p>
+    </div>
+</div>
 
 <script>
     function toggleEditForm() {
@@ -40,6 +43,29 @@
         viewMode.classList.toggle('hidden');
         editForm.classList.toggle('hidden');
     }
+
+    // Функция для проверки времени доступа
+    function checkAccess(reportId) {
+        fetch(`/check_access/${reportId}`, { method: 'GET' })
+            .then(response => {
+                if (!response.ok) {
+                    // Если доступ истек, показываем сообщение и перенаправляем
+                    document.getElementById('access-expired-message').classList.remove('hidden');
+                    setTimeout(() => {
+                        window.location.href = '/finance'; // Перенаправляем на страницу финансовых отчетов
+                    }, 5000); // Задержка 5 секунд перед перенаправлением
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при проверке доступа:', error);
+            });
+    }
+
+    // Интервал для периодической проверки доступа (каждые 10 секунд)
+    const reportId = {{ report.id }};
+    setInterval(() => {
+        checkAccess(reportId);
+    }, 5000); // 5 секунд
 </script>
 
 {% endblock %}
