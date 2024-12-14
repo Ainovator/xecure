@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
-from app.models import User, Report, ReportAccessRequest, UserActionLog
+from app.models import *
 from . import db
 from app.routes.auth_routes import auth
 from functools import wraps
@@ -32,6 +32,8 @@ def admin_panel():
     users = User.query.all()  # Список всех пользователей
     reports = Report.query.all()  # Список всех отчётов
     access_requests = ReportAccessRequest.query.all()  # Список всех запросов доступа
+    rejected_requests = RejectedRequest.query.all()
+
 
     # Обработка удаления отчёта
     if request.method == 'POST':
@@ -47,7 +49,7 @@ def admin_panel():
 
         return redirect(url_for('auth.admin_panel'))
 
-    return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests)
+    return render_template('admin_panel.html', users=users, reports=reports, requests=access_requests, rejected_requests=rejected_requests)
 
 
 @auth.route('/delete_user', methods=['POST'])

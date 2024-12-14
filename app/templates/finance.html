@@ -11,11 +11,12 @@
         <form method="GET" action="{{ url_for('auth.finance') }}" class="filter-form" id="filter-form">
             <label for="type-filter" class="filter-label">Фильтр по типу отчета:</label>
             <select id="type-filter" name="type" class="filter-select" onchange="submitFilterForm()">
-                <option value="">Все</option>
-                <option value="Финансовый">Финансовый</option>
-                <option value="Аналитический">Аналитический</option>
-                <option value="Стратегический">Стратегический</option>
-            </select>
+                <option value="" disabled {% if not request.args.get('type') %}selected{% endif %}>Выберите тип отчёта</option>
+                <option value="Все" {% if request.args.get('type') == 'Все' %}selected{% endif %}>Все</option>
+                <option value="Финансовый" {% if request.args.get('type') == 'Финансовый' %}selected{% endif %}>Финансовый</option>
+                <option value="Аналитический" {% if request.args.get('type') == 'Аналитический' %}selected{% endif %}>Аналитический</option>
+                <option value="Стратегический" {% if request.args.get('type') == 'Стратегический' %}selected{% endif %}>Стратегический</option>
+            </select>  
         </form>
     </div>
 

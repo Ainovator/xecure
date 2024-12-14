@@ -12,6 +12,7 @@
         <div class="profile-welcome">
             <h1>Добро пожаловать, {{ user.username }}!</h1>
             <p>Это ваш личный кабинет. Здесь вы можете управлять своим аккаунтом, просматривать статус запросов и обновлять личную информацию.</p>
+            <p>Уровень пользователя: {{ user.lvl }}</p>
             <div class="profile-actions">
                 <a href="{{ url_for('auth.logout') }}">
                     <button class="button button-logout">Выйти</button>
