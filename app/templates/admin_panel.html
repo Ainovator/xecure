@@ -47,9 +47,61 @@
             {% endif %}
         </section>
 
-       <!-- Вкладка "Отчёты" -->
+        <section id="blacklist-tab" class="tab-content">
+            <h1>Черный список</h1>
+            {% if rejected_requests %}
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Пользователь</th>
+                                <th>Отчёт</th>
+                                <th>Дата отклонения</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in rejected_requests %}
+                                <tr>
+                                    <td>{{ entry.id }}</td>
+                                    <td>{{ entry.user.username }}</td>
+                                    <td>{{ entry.report.title }}</td>
+                                    <td>{{ entry.rejected_at }}</td>
+                                    <td>
+                                        <form action="{{ url_for('auth.remove_from_blacklist', rejected_id=entry.id) }}" method="POST">
+                                            <button type="submit" class="delete-button">
+                                                <span class="delete-icon">🗑</span> Удалить
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>Черный список пуст.</p>
+            {% endif %}
+        </section>
+        
+
+        <!-- Вкладка "Отчёты" -->
         <section id="reports-tab" class="tab-content">
             <h1>Список отчётов</h1>
+        
+            <!-- Форма фильтрации -->
+            <form method="GET" action="{{ url_for('auth.admin_panel') }}" class="filter-form">
+                <label for="report_type">Тип отчёта:</label>
+                <select name="type" id="report_type">
+                    <option value="" {% if not report_type %}selected{% endif %}>Все</option>
+                    <option value="type1" {% if report_type == 'type1' %}selected{% endif %}>Тип 1</option>
+                    <option value="type2" {% if report_type == 'type2' %}selected{% endif %}>Тип 2</option>
+                    <!-- Добавьте другие типы, если необходимо -->
+                </select>
+                <button type="submit">Применить</button>
+            </form>
+        
             {% if reports %}
                 <div class="table-container">
                     <table class="styled-table">
@@ -68,7 +120,6 @@
                                     <td>{{ report.id }}</td>
                                     <td>{{ report.title }}</td>
                                     <td>{{ report.type_report }}</td>
-
                                     <td>{{ report.lvl }}</td>
                                     <td>
                                         <form action="{{ url_for('auth.admin_panel') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
@@ -90,7 +141,7 @@
                 <p>Отчёты не найдены.</p>
             {% endif %}
         </section>
-
+        
 
         <!-- Вкладка "Запросы" -->
         <section id="requests-tab" class="tab-content">
@@ -101,6 +152,7 @@
                         <div class="request-card">
                             <h4>Отчёт: {{ request.parent_report.title }}</h4>
                             <p><strong>От кого запрос:</strong> {{ request.user.username }}</p>
+                            <p><strong>Цель запроса:</strong> {{ request.request_purpose }}</p>
                             <div class="request-actions">
                                 {% if not request.approved %}
                                     <form action="{{ url_for('auth.approve_report', report_id=request.parent_report.id) }}" method="POST">
@@ -144,6 +196,11 @@
                     <li>
                         <button class="tab-link" data-tab="requests-tab">
                             <span class="tab-icon">📩</span> Запросы
+                        </button>
+                    </li>
+                    <li>
+                        <button class="tab-link" data-tab="blacklist-tab">
+                            <span class="tab-icon">🚫</span> Черный список
                         </button>
                     </li>
                 </ul>
