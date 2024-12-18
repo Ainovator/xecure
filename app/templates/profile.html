@@ -80,9 +80,7 @@
                 <li>
                     <p><strong>Пользователь:</strong> {{ user.username }}</p>
                     <p><strong>Событие:</strong> {{ logs.action }}</p>    
-                    <p><strong>Событие:</strong> {{ logs.timestamp }}</p>      
-  
-      
+                    <p><strong>Событие:</strong> {{ logs.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>      
                 </li>
             {% endfor %}
         </div>

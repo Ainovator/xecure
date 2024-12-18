@@ -14,10 +14,10 @@
 }
 
 .auth-container h1 {
-    font-size: 32px;
-    margin-bottom: 2rem;
-    color: #ff007f;
-    text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+    font-size: 28px;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    color: #fff;
 }
 
 /* Поля ввода */
@@ -54,23 +54,21 @@
 
 /* Кнопка */
 .button {
-    display: inline-block;
-    padding: 1rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.9rem;
     font-size: 16px;
     font-weight: bold;
-    text-transform: uppercase;
     color: #fff;
-    background: #ff007f;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .button:hover {
     transform: scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px #ff007f;
 }
 
 /* Ссылка */

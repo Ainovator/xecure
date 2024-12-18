@@ -118,8 +118,14 @@
                                     <form action="{{ url_for('auth.approve_report', report_id=request.parent_report.id) }}" method="POST">
                                         <label for="access_duration_{{ request.id }}">Время доступа (в секундах):</label>
                                         <input type="number" name="access_duration" min="1" value="60" id="access_duration_{{ request.id }}" required>
-                                        <button type="submit" class="btn btn-success">Одобрить</button>
+                                        
+                                        <!-- Кнопка для одобрения просмотра -->
+                                        <button type="submit" name="action" value="view" class="btn btn-success">Одобрить просмотр</button>
+                                        
+                                        <!-- Кнопка для одобрения с редактированием -->
+                                        <button type="submit" name="action" value="edit" class="btn btn-primary">Одобрить с редактированием</button>
                                     </form>
+                                
                                     <form action="{{ url_for('auth.reject_request', request_id=request.id) }}" method="POST">
                                         <button type="submit" class="btn btn-danger">Отклонить</button>
                                     </form>

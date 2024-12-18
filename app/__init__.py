@@ -8,13 +8,17 @@ import sqlite3
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from app.models import *
+import os
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
     app.config['SECRET_KEY'] = 'your_secret_key_here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.xecure'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/xecure/instance/db.xecure?check_same_thread=False'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config.from_pyfile('../config.py', silent=True)  # Загружаем конфигурацию из config.py, если он существует
+    app.config.from_pyfile('../config.py', silent=True)
+
+    # Создаём папку instance, если её нет
+    os.makedirs(app.instance_path, exist_ok=True)
 
     # Инициализация базы данных
     db.init_app(app)
@@ -22,7 +26,6 @@ def create_app():
     admin = Admin(app, name='My Admin Panel', template_mode='bootstrap4')
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Report, db.session))
-
 
     # Включение поддержки внешних ключей в SQLite
     @event.listens_for(Engine, "connect")
@@ -34,7 +37,7 @@ def create_app():
 
     # Инициализация менеджера входа
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'  # Перенаправлять неавторизованных пользователей на страницу входа
+    login_manager.login_view = 'auth.login'
     login_manager.login_message = "Пожалуйста, войдите, чтобы получить доступ к личному кабинету."
     login_manager.login_message_category = "info"
 

@@ -8,5 +8,5 @@ REDIS_DB = 0
 REDIS_DECODE_RESPONSES = True
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'xecuresecretkey')
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///db.xecure')
+SQLALCHEMY_DATABASE_URI = 'sqlite:////var/www/xecure/instance/db.xecure?check_same_thread=False'
 SQLALCHEMY_TRACK_MODIFICATIONS = False

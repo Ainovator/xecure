@@ -58,39 +58,62 @@ def create_report():
 @login_required
 @admin_required
 def approve_report(report_id):
-    """
-    Одобрение запроса на доступ к отчёту.
-    """
     report = Report.query.get(report_id)
     if not report:
-        flash('Отчёт не найден.', 'error')
+        flash('Отчет не найден.', 'error')
         return redirect(url_for('auth.admin_panel'))
 
-    access_duration = request.form.get('access_duration', 86400)  # 1 день по умолчанию
+    # Получаем продолжительность доступа
+    access_duration = request.form.get('access_duration', 86400)  # Время в секундах
     try:
         access_duration = int(access_duration)
-        if access_duration <= 0:
-            raise ValueError
     except ValueError:
-        flash('Некорректное время доступа. Укажите положительное число.', 'error')
+        flash('Некорректное время доступа. Пожалуйста, укажите число.', 'error')
         return redirect(url_for('auth.admin_panel'))
 
-    access_expiration = datetime.utcnow().replace(microsecond=0) + timedelta(seconds=access_duration)
+    if access_duration <= 0:
+        flash('Время доступа должно быть положительным числом.', 'error')
+        return redirect(url_for('auth.admin_panel'))
+
+    access_expiration = datetime.utcnow() + timedelta(seconds=access_duration)
+
+    # Удаляем истекшие запросы
     remove_expired_requests()
 
+    # Определяем права доступа на основе кнопки
+    action = request.form.get('action')  # Получаем значение кнопки
+    if action == 'view':
+        access_rights = 'просмотр'
+    elif action == 'edit':
+        access_rights = 'редактирование'
+    else:
+        flash('Некорректное действие.', 'error')
+        return redirect(url_for('auth.admin_panel'))
+
+    # Ищем запрос доступа
     access_request = ReportAccessRequest.query.filter_by(report_id=report.id, approved=False).first()
+
     if access_request:
         access_request.approved = True
         access_request.access_expiration = access_expiration
+        access_request.access_rights = access_rights  # Сохраняем права доступа
         db.session.commit()
 
-        log_user_action(current_user.id, f'Одобрение доступа к отчёту "{report.title}"')
-        log_user_action(access_request.user_id, f'Доступ к отчёту "{report.title}" предоставлен')
-        flash(f'Доступ к отчёту предоставлен на {access_duration} секунд.', 'success')
+        # Логируем действие с правами доступа
+        request_purpose = access_request.request_purpose if access_request.request_purpose else "Неизвестно"
+        log_user_action(
+            current_user.id,
+            f'Запрос для пользователя {access_request.user.username} одобрен на {access_duration} секунд с правами: {access_rights}. Цель: {request_purpose}.'
+        )
+
+        flash(f'Отчет был одобрен с правами: {access_rights}, доступ предоставлен на {access_duration} секунд.', 'success')
     else:
         flash('Запрос на доступ не найден.', 'error')
 
     return redirect(url_for('auth.admin_panel'))
+
+
+
 
 
 @auth.route('/request_access/<int:report_id>', methods=['POST'])
@@ -179,19 +202,23 @@ def view_report(report_id):
     """
     Просмотр отчёта, если доступ к нему был одобрен.
     """
-    access_request = get_existing_access_request(current_user.id, report_id)
+    # Получаем запрос на доступ, связанный с пользователем и отчётом
+    access_request = ReportAccessRequest.query.filter_by(user_id=current_user.id, report_id=report_id).first()
+
     if not access_request:
         flash('Вы не запрашивали доступ к этому отчёту.', 'error')
         return redirect(url_for('auth.finance'))
 
-    if access_request.access_expiration < datetime.utcnow().replace(microsecond=0):
+    # Проверяем, истёк ли срок действия доступа
+    if access_request.access_expiration < datetime.utcnow():
         db.session.delete(access_request)
         db.session.commit()
         flash('Срок действия доступа истёк. Запросите доступ снова.', 'error')
         return redirect(url_for('auth.finance'))
 
+    # Загружаем сам отчёт
     report = Report.query.get(report_id)
-    return render_template('view_report.html', report=report)
+    return render_template('view_report.html', report=report, access_request=access_request)
 
 
 

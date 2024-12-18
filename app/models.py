@@ -131,6 +131,8 @@ class ReportAccessRequest(db.Model):
         overlaps="requesting_user"
     )
 
+    edit_permission = db.Column(db.Boolean, default=False)  # Новое поле
+    
     def __repr__(self):
         return (
             f"<ReportAccessRequest user_id={self.user_id}, report_id={self.report_id}, "

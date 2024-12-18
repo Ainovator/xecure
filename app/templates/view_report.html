@@ -8,13 +8,20 @@
     <div id="view-mode">
         <div class="report-header">
             <h1 id="report-title">{{ report.title }}</h1>
-            <p id="report-date">Дата создания: {{ report.created_at }}</p>
+            <p id="report-date">Дата создания: {{ report.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p id="report-access-end">Дата окончания доступа: {{ access_request.access_expiration }}</p>
+            
+
         </div>
         <div class="report-content">
             <p id="report-content">{{ report.content }}</p>
         </div>
         <!-- Кнопка редактирования -->
-        <button class="btn toggle-edit-btn" onclick="toggleEditForm()">Редактировать</button>
+        {% if access_request.edit_permission %}
+            <!-- Кнопка редактирования -->
+            <button class="btn toggle-edit-btn" onclick="toggleEditForm()">Редактировать</button>
+        {% endif %}
+
     </div>
 
     <!-- Форма редактирования -->
