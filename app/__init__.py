@@ -12,11 +12,10 @@ import os
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
-    app.config['SECRET_KEY'] = 'your_secret_key_here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/xecure/instance/db.xecure?check_same_thread=False'
+    db_path = os.path.join(app.instance_path, "db.xecure")
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}?check_same_thread=False"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config.from_pyfile('../config.py', silent=True)
-
     # Создаём папку instance, если её нет
     os.makedirs(app.instance_path, exist_ok=True)
 
