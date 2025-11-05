@@ -1,5 +1,6 @@
 # Игнорируем виртуальную среду Python
 venv/
+.venv/
 *.pyc
 *.pyo
 __pycache__/
